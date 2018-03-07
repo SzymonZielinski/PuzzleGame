@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PuzzleGame.cpp" />
+    <ClCompile Include="PuzzlePiece.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="PuzzleGame.h" />
@@ -126,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="PuzzleGame.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PuzzlePiece.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
