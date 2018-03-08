@@ -1,3 +1,6 @@
+#ifndef puzzlepieceH
+#define puzzlepieceH
+
 #include <QtWidgets>
 
 #pragma once
@@ -23,3 +26,4 @@ public:
 	void SetCorrectPosition(const int positionX, const int positionY);
 };
 
+#endif

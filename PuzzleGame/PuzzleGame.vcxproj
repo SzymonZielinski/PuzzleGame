@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PuzzleArea.cpp" />
     <ClCompile Include="PuzzleGame.cpp" />
     <ClCompile Include="PuzzlePiece.cpp" />
   </ItemGroup>
@@ -129,6 +130,7 @@
     <QtRcc Include="PuzzleGame.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PuzzleArea.h" />
     <ClInclude Include="PuzzlePiece.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -13,8 +13,8 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -28,8 +28,8 @@ class Ui_PuzzleGameClass
 {
 public:
     QWidget *centralWidget;
-    QLabel *label;
     QPushButton *testPushButton;
+    QFrame *frame;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -41,12 +41,26 @@ public:
         PuzzleGameClass->resize(1082, 732);
         centralWidget = new QWidget(PuzzleGameClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        label = new QLabel(centralWidget);
-        label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(50, 60, 131, 81));
         testPushButton = new QPushButton(centralWidget);
         testPushButton->setObjectName(QStringLiteral("testPushButton"));
         testPushButton->setGeometry(QRect(960, 20, 91, 31));
+        frame = new QFrame(centralWidget);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setGeometry(QRect(10, 10, 941, 661));
+        QPalette palette;
+        QBrush brush(QColor(170, 255, 255, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Base, brush);
+        QBrush brush1(QColor(170, 170, 255, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush1);
+        palette.setBrush(QPalette::Inactive, QPalette::Base, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::Window, brush1);
+        palette.setBrush(QPalette::Disabled, QPalette::Base, brush1);
+        palette.setBrush(QPalette::Disabled, QPalette::Window, brush1);
+        frame->setPalette(palette);
+        frame->setFrameShape(QFrame::StyledPanel);
+        frame->setFrameShadow(QFrame::Raised);
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -67,7 +81,6 @@ public:
     void retranslateUi(QMainWindow *PuzzleGameClass)
     {
         PuzzleGameClass->setWindowTitle(QApplication::translate("PuzzleGameClass", "PuzzleGame", nullptr));
-        label->setText(QApplication::translate("PuzzleGameClass", "TextLabel", nullptr));
         testPushButton->setText(QApplication::translate("PuzzleGameClass", "PushButton", nullptr));
     } // retranslateUi
 
