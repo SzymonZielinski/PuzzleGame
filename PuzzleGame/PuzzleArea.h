@@ -15,6 +15,7 @@ private:
 public:
 	PuzzleArea();
 	~PuzzleArea();
+	void MovePuzzlePiece(const int rowPosition, const int colPosition);
 };
 
 #endif

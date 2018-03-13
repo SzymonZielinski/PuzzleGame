@@ -38,15 +38,15 @@ public:
     {
         if (PuzzleGameClass->objectName().isEmpty())
             PuzzleGameClass->setObjectName(QStringLiteral("PuzzleGameClass"));
-        PuzzleGameClass->resize(1082, 732);
+        PuzzleGameClass->resize(1104, 732);
         centralWidget = new QWidget(PuzzleGameClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         testPushButton = new QPushButton(centralWidget);
         testPushButton->setObjectName(QStringLiteral("testPushButton"));
-        testPushButton->setGeometry(QRect(960, 20, 91, 31));
+        testPushButton->setGeometry(QRect(760, 20, 75, 23));
         frame = new QFrame(centralWidget);
         frame->setObjectName(QStringLiteral("frame"));
-        frame->setGeometry(QRect(10, 10, 941, 661));
+        frame->setGeometry(QRect(9, 9, 741, 661));
         QPalette palette;
         QBrush brush(QColor(170, 255, 255, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -64,7 +64,7 @@ public:
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1082, 21));
+        menuBar->setGeometry(QRect(0, 0, 1104, 21));
         PuzzleGameClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(PuzzleGameClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));

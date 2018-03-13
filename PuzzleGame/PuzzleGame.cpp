@@ -5,15 +5,17 @@
 void PuzzleGame::clickButton()
 {
 	PuzzleArea* newGameArea = new PuzzleArea();
-	newGameArea->setBaseSize(500, 500);
+	newGameArea->setBaseSize(1000, 1000);
 	this->layout()->addWidget(newGameArea);
-	
+	//newGameArea->setGeometry(10, 10, 500, 500);
+
 	QPalette framePalette = ui.frame->palette();
 	framePalette.setColor(QPalette::Background, Qt::red);
 	ui.frame->setAutoFillBackground(true);
 	ui.frame->setPalette(framePalette);
 	ui.frame->show();
-	return;
+	//return;
+	
 	QPalette pal = newGameArea->palette();
 
 	// set black background
@@ -22,8 +24,7 @@ void PuzzleGame::clickButton()
 	newGameArea->setPalette(pal);
 	newGameArea->show();
 
-	newGameArea->setGeometry(10, 10, 600, 600);
-
+	ui.frame = newGameArea;
 	PuzzlePiece* newPiece = new PuzzlePiece(2, 3, 500, 500);
 
 	QString fileName = "d:\\s.png";
@@ -36,10 +37,48 @@ void PuzzleGame::clickButton()
 	QImage* puzzleImage = new QImage();
 	if (puzzleImage->load(fileName))
 	{
+		QPixmap imageMap = QPixmap::fromImage(*puzzleImage).scaled(newGameArea->size(), Qt::KeepAspectRatio);// QPixmap::fromImage(newPiece->pixmap()->toImage());
+		newGameArea->setBaseSize(imageMap.size());
+		//imageMap.res
+		int rowCount = 5;
+		int colCount = 5;
+		int puzzlePieceWidth = imageMap.width() / colCount;
+		int puzzlePieceHeight = imageMap.height() / rowCount;
 
+		PuzzlePiece** puzzleBoard = new PuzzlePiece*[rowCount];
+		for (int i = 0; i < rowCount; i++)
+			puzzleBoard[i] = new PuzzlePiece[colCount];
+
+		auto layout = new QGridLayout();// QBoxLayout::LeftToRight);// QVBoxLayout();
+		layout->setSpacing(1);
+		//layout->setmSetMinAndMaxSize
+		newGameArea->setLayout(layout);
+		for (int i = 0; i < rowCount; i++)
+		{
+			layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
+			layout->setRowStretch(i, 1);
+			//layout.row
+			for (int j = 0; j < colCount; j++)
+			{
+				layout->setColumnMinimumWidth(j, puzzlePieceWidth);// +1);
+				puzzleBoard[i][j].SetPuzzleArea(newGameArea);
+				puzzleBoard[i][j].SetCorrectPosition(i, j);
+				QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
+				puzzleBoard[i][j].setPixmap(newMap);
+				layout->addWidget(&puzzleBoard[i][j], i, j);
+				//this->layout()->addWidget(&puzzleBoard[i][j]);
+				//puzzleBoard[i][j].setGeometry(j * puzzlePieceWidth + 10, i * puzzlePieceHeight + 10, puzzlePieceWidth, puzzlePieceHeight);
+				//this->layout()->invalidate();// repaint();
+			}
+		}
+		PuzzlePiece* missingPiece = &puzzleBoard[rowCount - 1][colCount - 1];
+		missingPiece->setVisible(false);
+		
 	}
+
 	delete puzzleImage;
 
+	return;
 	newPiece->LoadImage(fileName);
 	//newPiece->setText("New Piece");
 	//this->layout()->addWidget(newPiece);
@@ -52,7 +91,7 @@ void PuzzleGame::clickButton()
 	int colCount = 5;
 	int puzzlePieceWidth = imageMap.width() / colCount;
 	int puzzlePieceHeight = imageMap.height() / rowCount;
-
+	
 	PuzzlePiece** puzzleBoard = new PuzzlePiece*[rowCount];
 	for (int i = 0; i < rowCount; i++)
 		puzzleBoard[i] = new PuzzlePiece[colCount];

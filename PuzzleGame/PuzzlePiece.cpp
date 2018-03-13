@@ -1,7 +1,12 @@
 #include<iostream>
 #include "PuzzlePiece.h"
+#include "PuzzleArea.h"
 using namespace std;
 
+void PuzzlePiece::clickOnPuzzlePiece()
+{
+	//myPuzzleArea
+}
 
 //void PuzzlePiece::resizeEvent(QResizeEvent *event)
 //{
@@ -18,6 +23,11 @@ using namespace std;
 
 PuzzlePiece::PuzzlePiece()
 {
+	
+}
+PuzzlePiece::SetPuzzleArea(PuzzleArea* puzzleArea)
+{
+	myPuzzleArea = puzzleArea;
 
 }
 PuzzlePiece::PuzzlePiece(const int correctPositionX, const int correctPositionY, const int width, const int height):correctX(correctPositionX), correctY(correctPositionY)
