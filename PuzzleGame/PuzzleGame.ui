@@ -27,11 +27,11 @@
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="PuzzleArea" name="puzzleGameArea">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>9</y>
+      <x>20</x>
+      <y>10</y>
       <width>741</width>
       <height>661</height>
      </rect>
@@ -129,6 +129,14 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PuzzleArea</class>
+   <extends>QFrame</extends>
+   <header>PuzzleArea.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="PuzzleGame.qrc"/>
  </resources>

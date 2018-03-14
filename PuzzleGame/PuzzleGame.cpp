@@ -1,20 +1,21 @@
 #include "PuzzleGame.h"
 #include "PuzzlePiece.h"
-#include "PuzzleArea.h"
+//#include "PuzzleArea.h"
 
 void PuzzleGame::clickButton()
 {
-	PuzzleArea* newGameArea = new PuzzleArea();
-	newGameArea->setBaseSize(1000, 1000);
-	this->layout()->addWidget(newGameArea);
+	PuzzleArea* newGameArea = ui.puzzleGameArea;// new PuzzleArea();
+	
+	//newGameArea->setBaseSize(1000, 1000);
+	//this->layout()->addWidget(newGameArea);
 	//newGameArea->setGeometry(10, 10, 500, 500);
 
-	QPalette framePalette = ui.frame->palette();
+	/*QPalette framePalette = ui.frame->palette();
 	framePalette.setColor(QPalette::Background, Qt::red);
 	ui.frame->setAutoFillBackground(true);
 	ui.frame->setPalette(framePalette);
 	ui.frame->show();
-	//return;
+	*///return;
 	
 	QPalette pal = newGameArea->palette();
 
@@ -24,7 +25,7 @@ void PuzzleGame::clickButton()
 	newGameArea->setPalette(pal);
 	newGameArea->show();
 
-	ui.frame = newGameArea;
+	//ui.frame = newGameArea;
 	PuzzlePiece* newPiece = new PuzzlePiece(2, 3, 500, 500);
 
 	QString fileName = "d:\\s.png";
@@ -49,23 +50,26 @@ void PuzzleGame::clickButton()
 		for (int i = 0; i < rowCount; i++)
 			puzzleBoard[i] = new PuzzlePiece[colCount];
 
-		auto layout = new QGridLayout();// QBoxLayout::LeftToRight);// QVBoxLayout();
-		layout->setSpacing(1);
+		//auto layout = new QGridLayout();// QBoxLayout::LeftToRight);// QVBoxLayout();
+		//layout->setSpacing(1);
 		//layout->setmSetMinAndMaxSize
-		newGameArea->setLayout(layout);
+		//newGameArea->setLayout(layout);
 		for (int i = 0; i < rowCount; i++)
 		{
-			layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
-			layout->setRowStretch(i, 1);
+			//layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
+			//layout->setRowStretch(i, 1);
 			//layout.row
 			for (int j = 0; j < colCount; j++)
 			{
-				layout->setColumnMinimumWidth(j, puzzlePieceWidth);// +1);
-				puzzleBoard[i][j].SetPuzzleArea(newGameArea);
+				//layout->setColumnMinimumWidth(j, puzzlePieceWidth);// +1);
+				//puzzleBoard[i][j].SetPuzzleArea(newGameArea);
 				puzzleBoard[i][j].SetCorrectPosition(i, j);
 				QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
 				puzzleBoard[i][j].setPixmap(newMap);
-				layout->addWidget(&puzzleBoard[i][j], i, j);
+				puzzleBoard[i][j].setParent(newGameArea);
+				puzzleBoard[i][j].setGeometry(j * puzzlePieceWidth + j * 1, i * puzzlePieceHeight + i * 1, puzzlePieceWidth, puzzlePieceHeight);
+				puzzleBoard[i][j].show();
+				//layout->addWidget(&puzzleBoard[i][j], i, j);
 				//this->layout()->addWidget(&puzzleBoard[i][j]);
 				//puzzleBoard[i][j].setGeometry(j * puzzlePieceWidth + 10, i * puzzlePieceHeight + 10, puzzlePieceWidth, puzzlePieceHeight);
 				//this->layout()->invalidate();// repaint();
@@ -141,4 +145,9 @@ PuzzleGame::PuzzleGame(QWidget *parent)
 	ui.setupUi(this);
 	
 	connect(ui.testPushButton, SIGNAL(clicked()), this, SLOT(clickButton()));
+}
+
+PuzzleGame::~PuzzleGame()
+{
+	//	delete ui.puzzleGameArea;
 }

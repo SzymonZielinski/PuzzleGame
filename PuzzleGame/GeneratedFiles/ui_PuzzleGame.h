@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -21,6 +20,7 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include "PuzzleArea.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -29,7 +29,7 @@ class Ui_PuzzleGameClass
 public:
     QWidget *centralWidget;
     QPushButton *testPushButton;
-    QFrame *frame;
+    PuzzleArea *puzzleGameArea;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -44,9 +44,9 @@ public:
         testPushButton = new QPushButton(centralWidget);
         testPushButton->setObjectName(QStringLiteral("testPushButton"));
         testPushButton->setGeometry(QRect(760, 20, 75, 23));
-        frame = new QFrame(centralWidget);
-        frame->setObjectName(QStringLiteral("frame"));
-        frame->setGeometry(QRect(9, 9, 741, 661));
+        puzzleGameArea = new PuzzleArea(centralWidget);
+        puzzleGameArea->setObjectName(QStringLiteral("puzzleGameArea"));
+        puzzleGameArea->setGeometry(QRect(20, 10, 741, 661));
         QPalette palette;
         QBrush brush(QColor(170, 255, 255, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -58,9 +58,9 @@ public:
         palette.setBrush(QPalette::Inactive, QPalette::Window, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Base, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Window, brush1);
-        frame->setPalette(palette);
-        frame->setFrameShape(QFrame::StyledPanel);
-        frame->setFrameShadow(QFrame::Raised);
+        puzzleGameArea->setPalette(palette);
+        puzzleGameArea->setFrameShape(QFrame::StyledPanel);
+        puzzleGameArea->setFrameShadow(QFrame::Raised);
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));

@@ -9,6 +9,7 @@ class PuzzleGame : public QMainWindow
 
 public:
 	PuzzleGame(QWidget *parent = Q_NULLPTR);
+	~PuzzleGame();
 public slots:
 	void clickButton();
 private:

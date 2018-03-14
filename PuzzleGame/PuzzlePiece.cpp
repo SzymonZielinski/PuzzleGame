@@ -1,10 +1,11 @@
 #include<iostream>
 #include "PuzzlePiece.h"
-#include "PuzzleArea.h"
+//#include "PuzzleArea.h"
 using namespace std;
 
 void PuzzlePiece::clickOnPuzzlePiece()
 {
+	//if (abs(currentX-))
 	//myPuzzleArea
 }
 
@@ -25,11 +26,11 @@ PuzzlePiece::PuzzlePiece()
 {
 	
 }
-PuzzlePiece::SetPuzzleArea(PuzzleArea* puzzleArea)
-{
-	myPuzzleArea = puzzleArea;
-
-}
+//void PuzzlePiece::SetPuzzleArea(PuzzleArea* puzzleArea)
+//{
+//	//myPuzzleArea = puzzleArea;
+//
+//}
 PuzzlePiece::PuzzlePiece(const int correctPositionX, const int correctPositionY, const int width, const int height):correctX(correctPositionX), correctY(correctPositionY)
 {
 	/*correctX = correctPositionX;
@@ -39,6 +40,10 @@ PuzzlePiece::PuzzlePiece(const int correctPositionX, const int correctPositionY,
 
 	this->setFixedWidth(width);
 	this->setFixedHeight(height);
+}
+PuzzlePiece::PuzzlePiece(const PuzzlePiece& puzzlePiece)
+{
+
 }
 
 
@@ -67,4 +72,32 @@ void PuzzlePiece::SetCorrectPosition(const int positionX, const int positionY)
 {
 	correctX = positionX;
 	correctY = positionY;
+}
+
+void PuzzlePiece::SetCurrentPosition(const int positionX, const int positionY)
+{
+	currentX = positionX;
+	currentY = positionY;
+}
+
+void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
+{
+	QString textStr = "X: " + QString::number(this->currentX) + ", Y: " + QString::number(this->currentY);
+	QMessageBox::information(this, "Information", textStr);
+	//PuzzleArea* puzzleArea = (PuzzleArea*)this->parent();
+	//puzzleArea->MovePuzzlePiece(this->currentX, this->currentY);
+
+	
+	//	this->puzzlePieceWidth = this->width() / this->SizeX;
+//	this->puzzlePieceHeight = this->width() / this->SizeY;
+//	if (qevent->button() == Qt::LeftButton)
+//	{
+//		int x = qevent->pos().x();
+//		int y = qevent->pos().y();
+//
+//		QString textStr = "X: " + QString::number(qevent->pos().x()) + ", Y: " + QString::number(qevent->pos().y());
+//		QMessageBox::information(this, "Information", textStr);
+//
+//		//this->setVisible(!this->isVisible());
+//	}
 }
