@@ -21,16 +21,18 @@ void PuzzlePiece::clickOnPuzzlePiece()
 //	int h = size().height();
 //	widget->move(QPoint(w*xscale, h*yscale) - widget->rect().center());
 //}
-
 PuzzlePiece::PuzzlePiece()
 {
-	
+
 }
-//void PuzzlePiece::SetPuzzleArea(PuzzleArea* puzzleArea)
-//{
-//	//myPuzzleArea = puzzleArea;
-//
-//}
+PuzzlePiece::PuzzlePiece(PuzzleAreaBase* puzzleArea)
+{
+	myPuzzleArea = puzzleArea;
+}
+void PuzzlePiece::SetPuzzleArea(PuzzleAreaBase* puzzleArea)
+{
+	myPuzzleArea = puzzleArea;
+}
 PuzzlePiece::PuzzlePiece(const int correctPositionX, const int correctPositionY, const int width, const int height):correctX(correctPositionX), correctY(correctPositionY)
 {
 	/*correctX = correctPositionX;
@@ -41,9 +43,14 @@ PuzzlePiece::PuzzlePiece(const int correctPositionX, const int correctPositionY,
 	this->setFixedWidth(width);
 	this->setFixedHeight(height);
 }
+
 PuzzlePiece::PuzzlePiece(const PuzzlePiece& puzzlePiece)
 {
-
+	myPuzzleArea = puzzlePiece.myPuzzleArea;
+	correctX = puzzlePiece.correctX;
+	correctY = puzzlePiece.correctY;
+	currentX = puzzlePiece.currentX;
+	currentY = puzzlePiece.currentY;
 }
 
 
@@ -82,10 +89,12 @@ void PuzzlePiece::SetCurrentPosition(const int positionX, const int positionY)
 
 void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
 {
+	//return;
+	//this->clicked = true;
 	QString textStr = "X: " + QString::number(this->currentX) + ", Y: " + QString::number(this->currentY);
 	QMessageBox::information(this, "Information", textStr);
 	//PuzzleArea* puzzleArea = (PuzzleArea*)this->parent();
-	//puzzleArea->MovePuzzlePiece(this->currentX, this->currentY);
+	myPuzzleArea->MovePuzzlePiece(this->currentX, this->currentY);
 
 	
 	//	this->puzzlePieceWidth = this->width() / this->SizeX;
@@ -100,4 +109,10 @@ void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
 //
 //		//this->setVisible(!this->isVisible());
 //	}
+}
+
+PuzzlePiece PuzzlePiece::operator=(PuzzlePiece piece)
+{
+	PuzzlePiece tmp(piece);
+	return tmp;
 }

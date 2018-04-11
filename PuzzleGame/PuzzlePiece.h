@@ -2,11 +2,13 @@
 #define puzzlepieceH
 
 #include <QtWidgets>
-
+#include "PuzzleAreaBase.h"
 #pragma once
+//class PuzzleArea;
 class PuzzlePiece : public QLabel
 {
 private:
+	PuzzleAreaBase* myPuzzleArea;
 	int correctX;
 	int correctY;
 	int currentX;
@@ -25,15 +27,18 @@ protected:
 
 	void mousePressEvent(QMouseEvent *qevent);
 public:
+	//bool clicked = false;
 	PuzzlePiece();
-	//PuzzlePiece(PuzzleArea* puzzleArea);
+	PuzzlePiece(PuzzleAreaBase* puzzleArea);
 	PuzzlePiece(const int correctPositionX, const int correctPositionY, const int width, const int height);
 	PuzzlePiece(const PuzzlePiece& puzzlePiece);
-	//void SetPuzzleArea(PuzzleArea* puzzleArea);
+	void SetPuzzleArea(PuzzleAreaBase* puzzleArea);
 	~PuzzlePiece();
 	bool LoadImage(QString path);
 	void SetCorrectPosition(const int positionX, const int positionY);
 	void SetCurrentPosition(const int positionX, const int positionY);
+
+	PuzzlePiece operator=(PuzzlePiece piece);
 	/*PuzzlePiece& operator=(const PuzzlePiece& other)
 	{
 		QLabel::operator=(other);

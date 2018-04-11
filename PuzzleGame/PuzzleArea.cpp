@@ -36,7 +36,7 @@ PuzzleArea::PuzzleArea(QWidget *parent)
 			for (int j = 0; j < this->SizeY; j++)
 			{
 				//layout->setColumnMinimumWidth(j, puzzlePieceWidth);// +1);
-				//puzzleBoard[i][j].SetPuzzleArea(newGameArea);
+				PuzzlePieces[i*SizeX + j].SetPuzzleArea(this);
 				PuzzlePieces[i*SizeX + j].SetCorrectPosition(i, j);
 				PuzzlePieces[i*SizeX + j].SetCurrentPosition(i, j);
 				QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
@@ -51,9 +51,11 @@ PuzzleArea::PuzzleArea(QWidget *parent)
 			}
 		}
 		//PuzzlePieces[sizeX]
-		/*PuzzlePiece* missingPiece = &PuzzlePieces[this->SizeX - 1][this->SizeY - 1];
+		this->EmptyPieceX = this->SizeX - 1;
+		this->EmptyPieceY = this->SizeY - 1;
+		PuzzlePiece* missingPiece = &PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY];
 		missingPiece->setVisible(false);
-*/
+
 	}
 
 	//delete puzzleImage;
@@ -71,13 +73,29 @@ PuzzleArea::~PuzzleArea()
 
 void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition)
 {
+	QMessageBox::information(this, "Information", "Something");
 	if (abs(rowPosition - this->EmptyPieceX) == 1 || abs(colPosition - this->EmptyPieceY) == 1)
 	{
 		int tmpX = rowPosition;
 		int tmpY = colPosition;
 		// TODO: SWAP PUZZLE ELEMENTS
-		//PuzzlePiece tmp = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY];
-		//PuzzlePieces[rowPosition*this->SizeX+colPosition] = tmp;
+
+
+		/*PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].SetCurrentPosition(rowPosition, colPosition);
+
+		PuzzlePieces[rowPosition*this->SizeX + colPosition].SetCurrentPosition(this->EmptyPieceX, this->EmptyPieceY);
+
+		this->EmptyPieceX = rowPosition;
+		this->EmptyPieceY = colPosition;
+*/
+
+
+		//PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY]
+		//TODO********************************
+		PuzzlePiece tmp = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY];
+		PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY] = PuzzlePieces[rowPosition*this->SizeX + colPosition];
+		PuzzlePieces[rowPosition*this->SizeX+colPosition] = tmp;
+		
 		//PuzzlePiece* tmpPiece = &PuzzlePieces[this->EmptyPieceX][this->EmptyPieceY];
 		//this->PuzzlePieces[this->EmptyPieceX][this->EmptyPieceY] = this->PuzzlePieces[rowPosition][colPosition];
 	//	PuzzlePieces[rowPosition][colPosition] = *tmpPiece;
@@ -158,6 +176,23 @@ void PuzzleArea::mousePressEvent(QMouseEvent *qevent)
 		
 		//this->setVisible(!this->isVisible());
 	}
+	for (int i = 0; i < this->SizeX; i++)
+	{
+		//layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
+		//layout->setRowStretch(i, 1);
+		//layout.row
+		for (int j = 0; j < this->SizeY; j++)
+		{
+			//layout->setColumnMinimumWidth(j, puzzlePieceWidth);// +1);
+			//puzzleBoard[i][j].SetPuzzleArea(newGameArea);
+
+			//if (PuzzlePieces[i*SizeX + j].clicked)
+			//{
+			//	QMessageBox::information(this, "Information", "Time to move the piece");
+			//}
+		}
+	}
+
 }
 
 //void mouseRelessedEvent(QMouseEvent *me)

@@ -3,9 +3,12 @@
 
 #include <QtWidgets>
 #include "PuzzlePiece.h"
-
+#include "PuzzleAreaBase.h"
 #pragma once
-class PuzzleArea : public QFrame
+
+
+
+class PuzzleArea : public QFrame, public PuzzleAreaBase //QFrame
 {
 private:
 	int SizeX; // ilość elementów układanki w poziomie
@@ -16,7 +19,7 @@ private:
 	int puzzlePieceHeight;
 	int puzzlePieceSpacingX = 1;
 	int puzzlePieceSpacingY = 1;
-	QVector<PuzzlePiece> PuzzlePieces;
+	QVector<PuzzlePiece> PuzzlePieces; // układanka właściwa
 	//PuzzlePiece** PuzzlePieces;
 
 protected:

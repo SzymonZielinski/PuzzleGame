@@ -42,6 +42,9 @@
     <ClCompile Include="PuzzleArea.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PuzzleAreaBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="PuzzleGame.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PuzzleArea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PuzzleAreaBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
