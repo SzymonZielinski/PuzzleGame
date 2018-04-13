@@ -73,8 +73,8 @@ PuzzleArea::~PuzzleArea()
 
 void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition)
 {
-	QMessageBox::information(this, "Information", "Something");
-	if (abs(rowPosition - this->EmptyPieceX) == 1 || abs(colPosition - this->EmptyPieceY) == 1)
+	//QMessageBox::information(this, "Information", "Something");
+	if (!(abs(rowPosition - this->EmptyPieceX) == 1) != !(abs(colPosition - this->EmptyPieceY) == 1))
 	{
 		int tmpX = rowPosition;
 		int tmpY = colPosition;
@@ -92,9 +92,25 @@ void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition)
 
 		//PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY]
 		//TODO********************************
-		PuzzlePiece tmp = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY];
-		PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY] = PuzzlePieces[rowPosition*this->SizeX + colPosition];
-		PuzzlePieces[rowPosition*this->SizeX+colPosition] = tmp;
+
+		QRect g1 = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].geometry();
+		QRect g2 = PuzzlePieces[rowPosition*this->SizeX + colPosition].geometry();
+
+		std::swap(PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY], PuzzlePieces[rowPosition*this->SizeX + colPosition]);
+		PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].Swap(PuzzlePieces[rowPosition*this->SizeX + colPosition]);
+
+		//SwapPieces(&PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY], &PuzzlePieces[rowPosition*this->SizeX + colPosition]);
+		g1 = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].geometry();
+		g2 = PuzzlePieces[rowPosition*this->SizeX + colPosition].geometry();
+
+		setEmptyPieceX(rowPosition);
+		setEmptyPieceY(colPosition);
+
+		g1 = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].geometry();
+		int a = 2; // delete, used for debugging
+		//PuzzlePiece tmp = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY];
+		//PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY] = PuzzlePieces[rowPosition*this->SizeX + colPosition];
+		//PuzzlePieces[rowPosition*this->SizeX+colPosition] = tmp;
 		
 		//PuzzlePiece* tmpPiece = &PuzzlePieces[this->EmptyPieceX][this->EmptyPieceY];
 		//this->PuzzlePieces[this->EmptyPieceX][this->EmptyPieceY] = this->PuzzlePieces[rowPosition][colPosition];
@@ -193,6 +209,17 @@ void PuzzleArea::mousePressEvent(QMouseEvent *qevent)
 		}
 	}
 
+}
+
+void PuzzleArea::SwapPieces(PuzzlePiece* puzzlePiece1, PuzzlePiece* puzzlePiece2)
+{
+	//PuzzlePiece* tmpPiece = puzzlePiece1;
+	//puzzlePiece1 = puzzlePiece2;
+	//puzzlePiece2 = tmpPiece;
+
+	PuzzlePiece tmpPiece = *puzzlePiece1;
+	*puzzlePiece1 = *puzzlePiece2;
+	*puzzlePiece2 = tmpPiece;
 }
 
 //void mouseRelessedEvent(QMouseEvent *me)

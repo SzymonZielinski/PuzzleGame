@@ -32,6 +32,7 @@ public:
 	int getEmptyPieceY();
 	bool setEmptyPieceX(int x);
 	bool setEmptyPieceY(int y);
+	void SwapPieces(PuzzlePiece* puzzlePiece1, PuzzlePiece* puzzlePiece2);
 
 public slots:
 	void clickOnPuzzleArea();

@@ -37,8 +37,9 @@ public:
 	bool LoadImage(QString path);
 	void SetCorrectPosition(const int positionX, const int positionY);
 	void SetCurrentPosition(const int positionX, const int positionY);
+	void Swap(PuzzlePiece& puzzlePiece);
 
-	PuzzlePiece operator=(PuzzlePiece piece);
+	PuzzlePiece& operator=(PuzzlePiece piece);
 	/*PuzzlePiece& operator=(const PuzzlePiece& other)
 	{
 		QLabel::operator=(other);

@@ -51,6 +51,7 @@ PuzzlePiece::PuzzlePiece(const PuzzlePiece& puzzlePiece)
 	correctY = puzzlePiece.correctY;
 	currentX = puzzlePiece.currentX;
 	currentY = puzzlePiece.currentY;
+	this->setGeometry(puzzlePiece.geometry());
 }
 
 
@@ -91,10 +92,10 @@ void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
 {
 	//return;
 	//this->clicked = true;
-	QString textStr = "X: " + QString::number(this->currentX) + ", Y: " + QString::number(this->currentY);
-	QMessageBox::information(this, "Information", textStr);
+	//QString textStr = "X: " + QString::number(this->currentX) + ", Y: " + QString::number(this->currentY);
+	//QMessageBox::information(this, "Information", textStr);
 	//PuzzleArea* puzzleArea = (PuzzleArea*)this->parent();
-	myPuzzleArea->MovePuzzlePiece(this->currentX, this->currentY);
+	myPuzzleArea->MovePuzzlePiece(currentX, currentY);
 
 	
 	//	this->puzzlePieceWidth = this->width() / this->SizeX;
@@ -111,8 +112,60 @@ void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
 //	}
 }
 
-PuzzlePiece PuzzlePiece::operator=(PuzzlePiece piece)
+PuzzlePiece& PuzzlePiece::operator=(PuzzlePiece puzzlePiece)
 {
-	PuzzlePiece tmp(piece);
-	return tmp;
+	//PuzzlePiece tmp(piece);
+	myPuzzleArea = puzzlePiece.myPuzzleArea;
+	correctX = puzzlePiece.correctX;
+	correctY = puzzlePiece.correctY;
+	//currentX = puzzlePiece.currentX;
+	//currentY = puzzlePiece.currentY;
+	
+	this->setGeometry(puzzlePiece.geometry());
+	return *this;
+}
+
+void PuzzlePiece::Swap(PuzzlePiece& puzzlePiece)
+{
+	QImage tmpImage = puzzlePiece.pixmap()->toImage();
+	puzzlePiece.setPixmap(*pixmap());
+	//if (tmpMap)
+	setPixmap(QPixmap::fromImage(tmpImage));// ->toImage()));
+
+	bool visibility = puzzlePiece.isVisible();
+	puzzlePiece.setVisible(isVisible());
+	setVisible(visibility);
+
+	QRect tmpGeometry = puzzlePiece.geometry();
+	puzzlePiece.setGeometry(geometry());
+	setGeometry(tmpGeometry);
+
+
+	//const QPixmap* pixmap = ui.Picture->pixmap();
+	//PuzzleAreaBase* tmpmyPuzzleArea = puzzlePiece.myPuzzleArea;
+	///*int tmpcorrectX = puzzlePiece.correctX;
+	//int tmpcorrectY = puzzlePiece.correctY;*/
+	//int tmpcurrentX = puzzlePiece.currentX;
+	//int tmpcurrentY = puzzlePiece.currentY;
+	//QRect tmpGeometry = puzzlePiece.geometry();
+	//QRect thisGeometry = geometry();
+
+	//puzzlePiece.myPuzzleArea = myPuzzleArea;
+	////puzzlePiece.correctX = correctX;
+	////puzzlePiece.correctY = correctY;
+	//puzzlePiece.currentX = currentX;
+	//puzzlePiece.currentY = currentY;
+	//puzzlePiece.setGeometry(geometry());
+
+	//myPuzzleArea = tmpmyPuzzleArea;
+	////correctX = tmpcorrectX;
+	////correctY = tmpcorrectY;
+	//currentX = tmpcurrentX;
+	//currentY = tmpcurrentY;
+	//this->setGeometry(tmpGeometry);
+
+	//tmpGeometry = puzzlePiece.geometry();
+	//thisGeometry = geometry();
+	//
+
 }
