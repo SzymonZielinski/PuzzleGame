@@ -4,6 +4,14 @@
 
 void PuzzleGame::clickButton()
 {
+
+	qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
+
+	ui.puzzleGameArea->StartGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value());
+	QMessageBox::information(this, "Information", "Get ready!");
+	ui.puzzleGameArea->Shuffle(ui.shuffleComplexitySpinBox->value());
+	
+	return;
 	PuzzleArea* newGameArea = ui.puzzleGameArea;// new PuzzleArea();
 	
 	//newGameArea->setBaseSize(1000, 1000);

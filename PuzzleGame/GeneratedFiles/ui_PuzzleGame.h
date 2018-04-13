@@ -17,6 +17,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -30,6 +31,9 @@ public:
     QWidget *centralWidget;
     QPushButton *testPushButton;
     PuzzleArea *puzzleGameArea;
+    QSpinBox *shuffleComplexitySpinBox;
+    QSpinBox *puzzleElementsXSpinBox;
+    QSpinBox *puzzleElementsYSpinBox;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -43,7 +47,7 @@ public:
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         testPushButton = new QPushButton(centralWidget);
         testPushButton->setObjectName(QStringLiteral("testPushButton"));
-        testPushButton->setGeometry(QRect(760, 20, 75, 23));
+        testPushButton->setGeometry(QRect(790, 70, 75, 23));
         puzzleGameArea = new PuzzleArea(centralWidget);
         puzzleGameArea->setObjectName(QStringLiteral("puzzleGameArea"));
         puzzleGameArea->setGeometry(QRect(20, 10, 741, 661));
@@ -61,6 +65,22 @@ public:
         puzzleGameArea->setPalette(palette);
         puzzleGameArea->setFrameShape(QFrame::StyledPanel);
         puzzleGameArea->setFrameShadow(QFrame::Raised);
+        shuffleComplexitySpinBox = new QSpinBox(centralWidget);
+        shuffleComplexitySpinBox->setObjectName(QStringLiteral("shuffleComplexitySpinBox"));
+        shuffleComplexitySpinBox->setGeometry(QRect(900, 70, 41, 22));
+        shuffleComplexitySpinBox->setMinimum(1);
+        shuffleComplexitySpinBox->setMaximum(10);
+        shuffleComplexitySpinBox->setValue(1);
+        puzzleElementsXSpinBox = new QSpinBox(centralWidget);
+        puzzleElementsXSpinBox->setObjectName(QStringLiteral("puzzleElementsXSpinBox"));
+        puzzleElementsXSpinBox->setGeometry(QRect(910, 120, 42, 22));
+        puzzleElementsXSpinBox->setMinimum(2);
+        puzzleElementsXSpinBox->setMaximum(100);
+        puzzleElementsYSpinBox = new QSpinBox(centralWidget);
+        puzzleElementsYSpinBox->setObjectName(QStringLiteral("puzzleElementsYSpinBox"));
+        puzzleElementsYSpinBox->setGeometry(QRect(910, 170, 42, 22));
+        puzzleElementsYSpinBox->setMinimum(2);
+        puzzleElementsYSpinBox->setMaximum(100);
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -81,7 +101,7 @@ public:
     void retranslateUi(QMainWindow *PuzzleGameClass)
     {
         PuzzleGameClass->setWindowTitle(QApplication::translate("PuzzleGameClass", "PuzzleGame", nullptr));
-        testPushButton->setText(QApplication::translate("PuzzleGameClass", "PushButton", nullptr));
+        testPushButton->setText(QApplication::translate("PuzzleGameClass", "Shuffle", nullptr));
     } // retranslateUi
 
 };

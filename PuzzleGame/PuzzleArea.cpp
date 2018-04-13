@@ -7,56 +7,7 @@ PuzzleArea::PuzzleArea(QWidget *parent)
 	EmptyPieceX = -1;
 	EmptyPieceY = -1;
 
-	QString fileName = "d:\\s.png";
-	QImage puzzleImage;// = new QImage();
-	if (puzzleImage.load(fileName))
-	{
-		QPixmap imageMap = QPixmap::fromImage(puzzleImage).scaled(this->size(), Qt::KeepAspectRatio);// QPixmap::fromImage(newPiece->pixmap()->toImage());
-		this->setBaseSize(imageMap.size());
-		//imageMap.res
-		this->SizeX = 5;
-		this->SizeY = 5;
-		int puzzlePieceWidth = imageMap.width() / this->SizeY;
-		int puzzlePieceHeight = imageMap.height() / this->SizeX;
-
-		PuzzlePieces.resize(this->SizeX*this->SizeY);
-		//PuzzlePieces = new PuzzlePiece*[this->SizeX];
-		/*for (int i = 0; i < this->SizeX; i++)
-			PuzzlePieces[i] = new PuzzlePiece[this->SizeY];
-*/
-		//auto layout = new QGridLayout();// QBoxLayout::LeftToRight);// QVBoxLayout();
-		//layout->setSpacing(1);
-		//layout->setmSetMinAndMaxthis->Size
-		//newGameArea->setLayout(layout);
-		for (int i = 0; i < this->SizeX; i++)
-		{
-			//layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
-			//layout->setRowStretch(i, 1);
-			//layout.row
-			for (int j = 0; j < this->SizeY; j++)
-			{
-				//layout->setColumnMinimumWidth(j, puzzlePieceWidth);// +1);
-				PuzzlePieces[i*SizeX + j].SetPuzzleArea(this);
-				PuzzlePieces[i*SizeX + j].SetCorrectPosition(i, j);
-				PuzzlePieces[i*SizeX + j].SetCurrentPosition(i, j);
-				QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
-				PuzzlePieces[i*SizeX + j].setPixmap(newMap);
-				PuzzlePieces[i*SizeX + j].setParent(this);
-				PuzzlePieces[i*SizeX + j].setGeometry(j * puzzlePieceWidth + j * puzzlePieceSpacingX, i * puzzlePieceHeight + i * puzzlePieceSpacingY, puzzlePieceWidth, puzzlePieceHeight);
-				PuzzlePieces[i*SizeX + j].show();
-				//layout->addWidget(&puzzleBoard[i][j], i, j);
-				//this->layout()->addWidget(&puzzleBoard[i][j]);
-				//puzzleBoard[i][j].setGeometry(j * puzzlePieceWidth + 10, i * puzzlePieceHeight + 10, puzzlePieceWidth, puzzlePieceHeight);
-				//this->layout()->invalidate();// repaint();
-			}
-		}
-		//PuzzlePieces[sizeX]
-		this->EmptyPieceX = this->SizeX - 1;
-		this->EmptyPieceY = this->SizeY - 1;
-		PuzzlePiece* missingPiece = &PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY];
-		missingPiece->setVisible(false);
-
-	}
+	//StartGame(5, 5);
 
 	//delete puzzleImage;
 }
@@ -71,10 +22,10 @@ PuzzleArea::~PuzzleArea()
 	delete[] PuzzlePieces;*/
 }
 
-void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition)
+void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition, bool shufflingMode)
 {
 	//QMessageBox::information(this, "Information", "Something");
-	if (!(abs(rowPosition - this->EmptyPieceX) == 1) != !(abs(colPosition - this->EmptyPieceY) == 1))
+	if (!(abs(rowPosition - EmptyPieceX) == 1 && abs(colPosition - EmptyPieceY) == 0) != !(abs(colPosition - EmptyPieceY) == 1 && abs(rowPosition - EmptyPieceX) == 0))
 	{
 		int tmpX = rowPosition;
 		int tmpY = colPosition;
@@ -93,20 +44,20 @@ void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition)
 		//PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY]
 		//TODO********************************
 
-		QRect g1 = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].geometry();
-		QRect g2 = PuzzlePieces[rowPosition*this->SizeX + colPosition].geometry();
+		QRect g1 = PuzzlePieces[EmptyPieceX*SizeY + EmptyPieceY].geometry();
+		QRect g2 = PuzzlePieces[rowPosition*SizeY + colPosition].geometry();
 
-		std::swap(PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY], PuzzlePieces[rowPosition*this->SizeX + colPosition]);
-		PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].Swap(PuzzlePieces[rowPosition*this->SizeX + colPosition]);
+		std::swap(PuzzlePieces[EmptyPieceX*SizeY + EmptyPieceY], PuzzlePieces[rowPosition*SizeY + colPosition]);
+		PuzzlePieces[this->EmptyPieceX*SizeY + EmptyPieceY].Swap(PuzzlePieces[rowPosition*SizeY + colPosition]);
 
 		//SwapPieces(&PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY], &PuzzlePieces[rowPosition*this->SizeX + colPosition]);
-		g1 = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].geometry();
-		g2 = PuzzlePieces[rowPosition*this->SizeX + colPosition].geometry();
+		g1 = PuzzlePieces[this->EmptyPieceX*this->SizeY + this->EmptyPieceY].geometry();
+		g2 = PuzzlePieces[rowPosition*this->SizeY + colPosition].geometry();
 
 		setEmptyPieceX(rowPosition);
 		setEmptyPieceY(colPosition);
 
-		g1 = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].geometry();
+		g1 = PuzzlePieces[this->EmptyPieceX*this->SizeY + this->EmptyPieceY].geometry();
 		int a = 2; // delete, used for debugging
 		//PuzzlePiece tmp = PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY];
 		//PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY] = PuzzlePieces[rowPosition*this->SizeX + colPosition];
@@ -116,7 +67,10 @@ void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition)
 		//this->PuzzlePieces[this->EmptyPieceX][this->EmptyPieceY] = this->PuzzlePieces[rowPosition][colPosition];
 	//	PuzzlePieces[rowPosition][colPosition] = *tmpPiece;
 	}
+	//QMessageBox::information(this, "Congratulations", "A");
 	//PuzzlePieces[rowPosition][colPosition];
+	if (!shufflingMode && IsFinished())
+		QMessageBox::information(this, "Congratulations", "You solved the puzzle!");
 }
 
 int PuzzleArea::getEmptyPieceX()
@@ -127,7 +81,7 @@ int PuzzleArea::getEmptyPieceY()
 {
 	return EmptyPieceY;
 }
-bool PuzzleArea::setEmptyPieceX(int x)
+bool PuzzleArea::setEmptyPieceX(const int x)
 {
 	if (x >= 0 && x < SizeX)
 	{
@@ -139,7 +93,7 @@ bool PuzzleArea::setEmptyPieceX(int x)
 		return false;
 	}
 }
-bool PuzzleArea::setEmptyPieceY(int y)
+bool PuzzleArea::setEmptyPieceY(const int y)
 {
 	if (y >= 0 && y < SizeY)
 	{
@@ -150,6 +104,11 @@ bool PuzzleArea::setEmptyPieceY(int y)
 	{
 		return false;
 	}
+}
+
+bool PuzzleArea::setEmptyPiece(const int x, const int y)
+{
+	return setEmptyPieceX(x) && setEmptyPieceY(y);
 }
 
 void PuzzleArea::clickOnPuzzleArea()
@@ -231,3 +190,139 @@ void PuzzleArea::SwapPieces(PuzzlePiece* puzzlePiece1, PuzzlePiece* puzzlePiece2
 //
 //	// Anyway each widget receives those events, not only QFrame.... 
 //}
+
+void PuzzleArea::Shuffle(const int complexity)
+{
+
+	int currentX = EmptyPieceX;
+	int currentY = EmptyPieceY;
+	for (int i = 0; i < PuzzlePieces.size()*complexity; i++)
+	{
+		while (currentX == EmptyPieceX && currentY == EmptyPieceY)
+		{
+			int xory = qrand() % 2;
+			if (xory == 0) // przesuwamy po x
+			{
+				int leftOrRight = qrand() % 2;
+				if (leftOrRight == 0) // left
+				{
+					if (currentX != 0)
+						currentX--;
+				}
+				else
+				{
+					if (currentX != SizeX - 1)
+						currentX++;
+				}
+			}
+			else // przesuwamy po y
+			{
+				int upOrDown = qrand() % 2;
+				if (upOrDown == 0) // up
+				{
+					if (currentY != 0)
+						currentY--;
+				}
+				else
+				{
+					if (currentY != SizeY - 1)
+						currentY++;
+				}
+			}
+		} 
+			//if (currentX != EmptyPieceX || currentY != EmptyPieceY)
+		
+		MovePuzzlePiece(currentX, currentY, true);
+
+			/*std::swap(PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY], PuzzlePieces[currentX*this->SizeX + currentY]);
+			PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].Swap(PuzzlePieces[currentX*this->SizeX + currentY]);
+			setEmptyPiece(currentX, currentY);*/
+		
+	}
+
+}
+bool PuzzleArea::IsFinished()
+{
+	for (int i = 0; i < this->SizeX; i++)
+	{
+		//layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
+		//layout->setRowStretch(i, 1);
+		//layout.row
+		for (int j = 0; j < this->SizeY; j++)
+		{
+			if (!PuzzlePieces[i*this->SizeY + j].IsInCorrectPosition(i, j))
+				return false;
+		}
+	}
+	PuzzlePieces[EmptyPieceX*SizeY+EmptyPieceY].setVisible(true);
+	return true;
+}
+
+void PuzzleArea::StartGame(const int elementsX, const int elementsY)
+{
+	QPalette framePalette = palette();
+	framePalette.setColor(QPalette::Background, Qt::red);
+	setAutoFillBackground(true);
+	setPalette(framePalette);
+	
+	PuzzlePieces.resize(0);
+	QString fileName = "d:\\s.png";
+	QImage puzzleImage;// = new QImage();
+	if (puzzleImage.load(fileName))
+	{
+		this->SizeX = elementsX;
+		this->SizeY = elementsY;
+		QSize newSize(this->size());
+		newSize.setWidth(newSize.width() - SizeX * puzzlePieceSpacingX);
+		newSize.setHeight(newSize.height() - SizeY * puzzlePieceSpacingY);
+		QPixmap imageMap = QPixmap::fromImage(puzzleImage).scaled(newSize, Qt::KeepAspectRatio);// QPixmap::fromImage(newPiece->pixmap()->toImage());
+		this->setBaseSize(imageMap.size());
+		
+		QSize s1 = imageMap.size();
+		QSize s2 = this->size();
+		//imageMap.res
+		int puzzlePieceWidth = imageMap.width() / this->SizeY;// (this->width() < imageMap.width()) ? this->width() / this->SizeX : imageMap.width() / this->SizeX;
+		int puzzlePieceHeight = imageMap.height() / this->SizeX;//(this->height() < imageMap.height()) ? this->height() / this->SizeY : imageMap.height() / this->SizeY;
+
+		PuzzlePieces.resize(this->SizeX*this->SizeY);
+		//PuzzlePieces = new PuzzlePiece*[this->SizeX];
+		/*for (int i = 0; i < this->SizeX; i++)
+		PuzzlePieces[i] = new PuzzlePiece[this->SizeY];
+		*/
+		//auto layout = new QGridLayout();// QBoxLayout::LeftToRight);// QVBoxLayout();
+		//layout->setSpacing(1);
+		//layout->setmSetMinAndMaxthis->Size
+		//newGameArea->setLayout(layout);
+		for (int i = 0; i < this->SizeX; i++)
+		{
+			//layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
+			//layout->setRowStretch(i, 1);
+			//layout.row
+			for (int j = 0; j < this->SizeY; j++)
+			{
+				//layout->setColumnMinimumWidth(j, puzzlePieceWidth);// +1);
+				PuzzlePieces[i*SizeY + j].SetPuzzleArea(this);
+				PuzzlePieces[i*SizeY + j].SetCorrectPosition(i, j);
+				PuzzlePieces[i*SizeY + j].SetCurrentPosition(i, j);
+				//QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
+				QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
+				PuzzlePieces[i*SizeY + j].setPixmap(newMap);
+				PuzzlePieces[i*SizeY + j].setParent(this);
+				//PuzzlePieces[i*SizeY + j].setGeometry(j * puzzlePieceWidth + i * puzzlePieceSpacingX, j * puzzlePieceHeight + j * puzzlePieceSpacingY, puzzlePieceWidth, puzzlePieceHeight);
+				PuzzlePieces[i*SizeY + j].setGeometry(j * puzzlePieceWidth + j * puzzlePieceSpacingX, i * puzzlePieceHeight + i * puzzlePieceSpacingY, puzzlePieceWidth, puzzlePieceHeight);
+				PuzzlePieces[i*SizeY + j].show();
+				//layout->addWidget(&puzzleBoard[i][j], i, j);
+				//this->layout()->addWidget(&puzzleBoard[i][j]);
+				//puzzleBoard[i][j].setGeometry(j * puzzlePieceWidth + 10, i * puzzlePieceHeight + 10, puzzlePieceWidth, puzzlePieceHeight);
+				//this->layout()->invalidate();// repaint();
+			}
+		}
+		//PuzzlePieces[sizeX]
+		this->EmptyPieceX = this->SizeX - 1;
+		this->EmptyPieceY = this->SizeY - 1;
+		PuzzlePiece* missingPiece = &PuzzlePieces[this->EmptyPieceX*this->SizeY + this->EmptyPieceY];
+		missingPiece->setVisible(false);
+
+
+	}
+}

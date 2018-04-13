@@ -27,12 +27,16 @@ protected:
 public:
 	PuzzleArea(QWidget *parent = Q_NULLPTR);
 	~PuzzleArea();
-	void MovePuzzlePiece(const int rowPosition, const int colPosition);
+	void MovePuzzlePiece(const int rowPosition, const int colPosition, bool shufflingMode = false);
 	int getEmptyPieceX();
 	int getEmptyPieceY();
-	bool setEmptyPieceX(int x);
-	bool setEmptyPieceY(int y);
+	bool setEmptyPieceX(const int x);
+	bool setEmptyPieceY(const int y);
+	bool setEmptyPiece(const int x, const int y);
 	void SwapPieces(PuzzlePiece* puzzlePiece1, PuzzlePiece* puzzlePiece2);
+	void Shuffle(const int complexity = 4);
+	bool IsFinished();
+	void StartGame(const int elementsX, const int elementsY);
 
 public slots:
 	void clickOnPuzzleArea();

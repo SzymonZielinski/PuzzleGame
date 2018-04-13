@@ -38,7 +38,7 @@ public:
 	void SetCorrectPosition(const int positionX, const int positionY);
 	void SetCurrentPosition(const int positionX, const int positionY);
 	void Swap(PuzzlePiece& puzzlePiece);
-
+	bool IsInCorrectPosition(const int x, const int y);
 	PuzzlePiece& operator=(PuzzlePiece piece);
 	/*PuzzlePiece& operator=(const PuzzlePiece& other)
 	{

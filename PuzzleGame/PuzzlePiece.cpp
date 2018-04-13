@@ -133,6 +133,7 @@ void PuzzlePiece::Swap(PuzzlePiece& puzzlePiece)
 	setPixmap(QPixmap::fromImage(tmpImage));// ->toImage()));
 
 	bool visibility = puzzlePiece.isVisible();
+	bool isVis = isVisible();
 	puzzlePiece.setVisible(isVisible());
 	setVisible(visibility);
 
@@ -168,4 +169,8 @@ void PuzzlePiece::Swap(PuzzlePiece& puzzlePiece)
 	//thisGeometry = geometry();
 	//
 
+}
+bool PuzzlePiece::IsInCorrectPosition(const int x, const int y)
+{
+	return correctX == x && correctY == y;
 }
