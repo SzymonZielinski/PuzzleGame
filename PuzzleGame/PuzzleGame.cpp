@@ -2,6 +2,19 @@
 #include "PuzzlePiece.h"
 //#include "PuzzleArea.h"
 
+void PuzzleGame::loadImagePushButtonClick()
+{
+	QString fileName = QFileDialog::getOpenFileName(this,
+		tr("Open Image"),
+		QDir::currentPath(),
+		tr("Image Files (*.png *.jpg *.bmp)"));
+
+	if (!fileName.isNull())
+	{
+		ui.puzzleGameArea->StartGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), fileName);
+	}
+}
+
 void PuzzleGame::clickButton()
 {
 
@@ -44,6 +57,15 @@ void PuzzleGame::clickButton()
 		tr("Image Files (*.png *.jpg *.bmp)"));
 */
 	QImage* puzzleImage = new QImage();
+	/*
+	
+	puzzleImage->load("c:\\Users\\Szaman\\source\\repos\\PuzzleGame\\gmachglowny.jpg");
+	QByteArray ba;
+	QBuffer buffer(&ba);
+	buffer.open(QIODevice::WriteOnly);
+	puzzleImage->save(&buffer);*/
+
+	
 	if (puzzleImage->load(fileName))
 	{
 		QPixmap imageMap = QPixmap::fromImage(*puzzleImage).scaled(newGameArea->size(), Qt::KeepAspectRatio);// QPixmap::fromImage(newPiece->pixmap()->toImage());
@@ -153,6 +175,7 @@ PuzzleGame::PuzzleGame(QWidget *parent)
 	ui.setupUi(this);
 	
 	connect(ui.testPushButton, SIGNAL(clicked()), this, SLOT(clickButton()));
+	connect(ui.loadImagePushButton, SIGNAL(clicked()), this, SLOT(loadImagePushButtonClick()));
 }
 
 PuzzleGame::~PuzzleGame()

@@ -34,6 +34,7 @@ public:
     QSpinBox *shuffleComplexitySpinBox;
     QSpinBox *puzzleElementsXSpinBox;
     QSpinBox *puzzleElementsYSpinBox;
+    QPushButton *loadImagePushButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -81,6 +82,9 @@ public:
         puzzleElementsYSpinBox->setGeometry(QRect(910, 170, 42, 22));
         puzzleElementsYSpinBox->setMinimum(2);
         puzzleElementsYSpinBox->setMaximum(100);
+        loadImagePushButton = new QPushButton(centralWidget);
+        loadImagePushButton->setObjectName(QStringLiteral("loadImagePushButton"));
+        loadImagePushButton->setGeometry(QRect(790, 20, 161, 23));
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -102,6 +106,7 @@ public:
     {
         PuzzleGameClass->setWindowTitle(QApplication::translate("PuzzleGameClass", "PuzzleGame", nullptr));
         testPushButton->setText(QApplication::translate("PuzzleGameClass", "Shuffle", nullptr));
+        loadImagePushButton->setText(QApplication::translate("PuzzleGameClass", "Load an image", nullptr));
     } // retranslateUi
 
 };

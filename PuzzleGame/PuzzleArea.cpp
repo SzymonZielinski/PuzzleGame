@@ -49,6 +49,8 @@ void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition, b
 
 		std::swap(PuzzlePieces[EmptyPieceX*SizeY + EmptyPieceY], PuzzlePieces[rowPosition*SizeY + colPosition]);
 		PuzzlePieces[this->EmptyPieceX*SizeY + EmptyPieceY].Swap(PuzzlePieces[rowPosition*SizeY + colPosition]);
+		if (!shufflingMode)
+			moveCount++;
 
 		//SwapPieces(&PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY], &PuzzlePieces[rowPosition*this->SizeX + colPosition]);
 		g1 = PuzzlePieces[this->EmptyPieceX*this->SizeY + this->EmptyPieceY].geometry();
@@ -70,7 +72,10 @@ void PuzzleArea::MovePuzzlePiece(const int rowPosition, const int colPosition, b
 	//QMessageBox::information(this, "Congratulations", "A");
 	//PuzzlePieces[rowPosition][colPosition];
 	if (!shufflingMode && IsFinished())
-		QMessageBox::information(this, "Congratulations", "You solved the puzzle!");
+	{
+		QString finishMessage = "You solved the puzzle!\nIt took you " + QString::number(moveCount) + " moves.";
+		QMessageBox::information(this, "Congratulations", finishMessage);
+	}
 }
 
 int PuzzleArea::getEmptyPieceX()
@@ -193,51 +198,54 @@ void PuzzleArea::SwapPieces(PuzzlePiece* puzzlePiece1, PuzzlePiece* puzzlePiece2
 
 void PuzzleArea::Shuffle(const int complexity)
 {
-
-	int currentX = EmptyPieceX;
-	int currentY = EmptyPieceY;
-	for (int i = 0; i < PuzzlePieces.size()*complexity; i++)
+	while (IsFinished())
 	{
-		while (currentX == EmptyPieceX && currentY == EmptyPieceY)
+		int currentX = EmptyPieceX;
+		int currentY = EmptyPieceY;
+		for (int i = 0; i < PuzzlePieces.size()*complexity; i++)
 		{
-			int xory = qrand() % 2;
-			if (xory == 0) // przesuwamy po x
+			while (currentX == EmptyPieceX && currentY == EmptyPieceY)
 			{
-				int leftOrRight = qrand() % 2;
-				if (leftOrRight == 0) // left
+				int xory = qrand() % 2;
+				if (xory == 0) // przesuwamy po x
 				{
-					if (currentX != 0)
-						currentX--;
+					int leftOrRight = qrand() % 2;
+					if (leftOrRight == 0) // left
+					{
+						if (currentX != 0)
+							currentX--;
+					}
+					else
+					{
+						if (currentX != SizeX - 1)
+							currentX++;
+					}
 				}
-				else
+				else // przesuwamy po y
 				{
-					if (currentX != SizeX - 1)
-						currentX++;
+					int upOrDown = qrand() % 2;
+					if (upOrDown == 0) // up
+					{
+						if (currentY != 0)
+							currentY--;
+					}
+					else
+					{
+						if (currentY != SizeY - 1)
+							currentY++;
+					}
 				}
 			}
-			else // przesuwamy po y
-			{
-				int upOrDown = qrand() % 2;
-				if (upOrDown == 0) // up
-				{
-					if (currentY != 0)
-						currentY--;
-				}
-				else
-				{
-					if (currentY != SizeY - 1)
-						currentY++;
-				}
-			}
-		} 
 			//if (currentX != EmptyPieceX || currentY != EmptyPieceY)
-		
-		MovePuzzlePiece(currentX, currentY, true);
+
+			MovePuzzlePiece(currentX, currentY, true);
 
 			/*std::swap(PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY], PuzzlePieces[currentX*this->SizeX + currentY]);
 			PuzzlePieces[this->EmptyPieceX*this->SizeX + this->EmptyPieceY].Swap(PuzzlePieces[currentX*this->SizeX + currentY]);
 			setEmptyPiece(currentX, currentY);*/
-		
+
+		}
+		PuzzlePieces[EmptyPieceX*SizeY + EmptyPieceY].setVisible(false);
 	}
 
 }
@@ -258,18 +266,50 @@ bool PuzzleArea::IsFinished()
 	return true;
 }
 
-void PuzzleArea::StartGame(const int elementsX, const int elementsY)
+void PuzzleArea::StartGame(const int elementsX, const int elementsY, QString fileName)
 {
+	moveCount = 0;
+	if (fileName.isNull() || fileName.isEmpty())
+	{
+		if (!puzzlePictureFileName.isNull() && !puzzlePictureFileName.isEmpty())
+			fileName = puzzlePictureFileName;
+	}
 	QPalette framePalette = palette();
 	framePalette.setColor(QPalette::Background, Qt::red);
 	setAutoFillBackground(true);
 	setPalette(framePalette);
 	
 	PuzzlePieces.resize(0);
-	QString fileName = "d:\\s.png";
+	//QString fileName = "d:\\ss.png";
 	QImage puzzleImage;// = new QImage();
-	if (puzzleImage.load(fileName))
+
+	//QFileInfo check_file(fileName);
+	//// check if file exists and if yes: Is it really a file and not a directory
+	//if (!check_file.exists() || !check_file.isFile())
+	//{
+	//	QString defaultImage = "";
+	//	for (int i = 0; i < defaultImageBase64.count(); i++)
+	//	{
+	//		defaultImage += defaultImageBase64[i];
+	//	}
+	//	QByteArray imageData = QByteArray::fromBase64(defaultImage.toLatin1());
+	//}
+
+	if (fileName.isNull() || fileName.isEmpty() || !puzzleImage.load(fileName))
 	{
+		QString defaultImage = "";
+		for (int i = 0; i < defaultImageBase64.count(); i++)
+		{
+			defaultImage += defaultImageBase64[i];
+		}
+		QByteArray imageData = QByteArray::fromBase64(defaultImage.toLatin1());
+		puzzleImage.loadFromData(imageData);
+	}
+	else
+	{
+		puzzlePictureFileName = fileName;
+	}
+
 		this->SizeX = elementsX;
 		this->SizeY = elementsY;
 		QSize newSize(this->size());
@@ -320,9 +360,16 @@ void PuzzleArea::StartGame(const int elementsX, const int elementsY)
 		//PuzzlePieces[sizeX]
 		this->EmptyPieceX = this->SizeX - 1;
 		this->EmptyPieceY = this->SizeY - 1;
-		PuzzlePiece* missingPiece = &PuzzlePieces[this->EmptyPieceX*this->SizeY + this->EmptyPieceY];
-		missingPiece->setVisible(false);
+
+		//PuzzlePieces[EmptyPieceX*SizeY + EmptyPieceY].setVisible(false);
+
+		/*PuzzlePiece* missingPiece = &PuzzlePieces[this->EmptyPieceX*this->SizeY + this->EmptyPieceY];
+		missingPiece->setVisible(false);*/
 
 
-	}
+	
+}
+int PuzzleArea::getMoveCount()
+{
+	return moveCount;
 }

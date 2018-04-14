@@ -12,6 +12,8 @@ public:
 	~PuzzleGame();
 public slots:
 	void clickButton();
+	void loadImagePushButtonClick();
+	
 private:
 	Ui::PuzzleGameClass ui;
 };
