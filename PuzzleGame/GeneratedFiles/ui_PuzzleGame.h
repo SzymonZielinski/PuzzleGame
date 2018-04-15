@@ -29,7 +29,7 @@ class Ui_PuzzleGameClass
 {
 public:
     QWidget *centralWidget;
-    QPushButton *testPushButton;
+    QPushButton *startGamePushButton;
     PuzzleArea *puzzleGameArea;
     QSpinBox *shuffleComplexitySpinBox;
     QSpinBox *puzzleElementsXSpinBox;
@@ -46,12 +46,17 @@ public:
         PuzzleGameClass->resize(1104, 732);
         centralWidget = new QWidget(PuzzleGameClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        testPushButton = new QPushButton(centralWidget);
-        testPushButton->setObjectName(QStringLiteral("testPushButton"));
-        testPushButton->setGeometry(QRect(790, 70, 75, 23));
+        startGamePushButton = new QPushButton(centralWidget);
+        startGamePushButton->setObjectName(QStringLiteral("startGamePushButton"));
+        startGamePushButton->setGeometry(QRect(790, 70, 75, 23));
         puzzleGameArea = new PuzzleArea(centralWidget);
         puzzleGameArea->setObjectName(QStringLiteral("puzzleGameArea"));
         puzzleGameArea->setGeometry(QRect(20, 10, 741, 661));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(puzzleGameArea->sizePolicy().hasHeightForWidth());
+        puzzleGameArea->setSizePolicy(sizePolicy);
         QPalette palette;
         QBrush brush(QColor(170, 255, 255, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -105,7 +110,7 @@ public:
     void retranslateUi(QMainWindow *PuzzleGameClass)
     {
         PuzzleGameClass->setWindowTitle(QApplication::translate("PuzzleGameClass", "PuzzleGame", nullptr));
-        testPushButton->setText(QApplication::translate("PuzzleGameClass", "Shuffle", nullptr));
+        startGamePushButton->setText(QApplication::translate("PuzzleGameClass", "Start Game", nullptr));
         loadImagePushButton->setText(QApplication::translate("PuzzleGameClass", "Load an image", nullptr));
     } // retranslateUi
 

@@ -1,54 +1,59 @@
-#ifndef puzzlepieceH
-#define puzzlepieceH
+﻿#pragma once
 
 #include <QtWidgets>
 #include "PuzzleAreaBase.h"
-#pragma once
-//class PuzzleArea;
+/**
+Pojedynczy element układanki. Dziedziczy po QLabel.
+*/
 class PuzzlePiece : public QLabel
 {
 private:
+	/// wskaźnik do obszaru całej układanki
 	PuzzleAreaBase* myPuzzleArea;
+	/// właściwa pozycja X elementu
 	int correctX;
+	/// właściwa pozycja Y elementu
 	int correctY;
+	/// bieżąca pozycja X elementu
 	int currentX;
+	/// bieżąca pozycja Y elementu
 	int currentY;
-	//PuzzleArea* myPuzzleArea;
-	//void updatePosition(QWidget *widget, float xscale, float yscale);
-	/*void swap(PuzzlePiece& other)
-	{
-		std::swap(correctX, other.correctX);
-		std::swap(correctY, other.correctY);
-		std::swap(currentX, other.currentX);
-		std::swap(currentY, other.currentY);
-	}*/
 protected:
 	//void resizeEvent(QResizeEvent *event);
-
+	/// Kliknięcie myszą na elemencie układanki powoduje przesunięcie go w wolne miejsce obok (o ile to możliwe).
 	void mousePressEvent(QMouseEvent *qevent);
 public:
-	//bool clicked = false;
 	PuzzlePiece();
 	PuzzlePiece(PuzzleAreaBase* puzzleArea);
 	PuzzlePiece(const int correctPositionX, const int correctPositionY, const int width, const int height);
 	PuzzlePiece(const PuzzlePiece& puzzlePiece);
-	void SetPuzzleArea(PuzzleAreaBase* puzzleArea);
 	~PuzzlePiece();
-	bool LoadImage(QString path);
-	void SetCorrectPosition(const int positionX, const int positionY);
-	void SetCurrentPosition(const int positionX, const int positionY);
-	void Swap(PuzzlePiece& puzzlePiece);
-	bool IsInCorrectPosition(const int x, const int y);
-	PuzzlePiece& operator=(PuzzlePiece piece);
-	/*PuzzlePiece& operator=(const PuzzlePiece& other)
-	{
-		QLabel::operator=(other);
-		PuzzlePiece temp(other);
-		swap(temp);
-		return *this;
-	}*/
-public slots:
-	void clickOnPuzzlePiece();
-};
 
-#endif
+	/**
+	Ustawia obszar układanki dla danego elementu.
+	*/
+	void setPuzzleArea(PuzzleAreaBase* puzzleArea);
+	/**
+	Ustawia właściwą pozycję danego elementu.
+	*/
+	void setCorrectPosition(const int positionX, const int positionY);
+	/**
+	Ustawia bieżącą pozycję danego elementu.
+	*/
+	void setCurrentPosition(const int positionX, const int positionY);
+	/**
+	Zamienia dane o widocznej części elementu miejscami.
+	*/
+	void swapVisibleImageData(PuzzlePiece& puzzlePiece);
+	/**
+	Zwraca informację, czy element znajduje się na właściwej pozycji.
+	\param x Współrzędna x elementu
+	\param y Współrzędna y elementu
+	\return true jeśli prawda, false w przeciwnym wypadku
+	*/
+	bool isInCorrectPosition(const int x, const int y);
+	/**
+	Przeładowanie operatora przypisania (do poprawnego działania std::swap)
+	*/
+	PuzzlePiece& operator=(PuzzlePiece piece);
+};
