@@ -35,21 +35,21 @@ private:
 	/// nazwa pliku obrazku układanki
 	QString puzzlePictureFileName;
 	/// ilość elementów układanki w poziomie
-	int SizeX;
+	int sizeX;
 	/// ilość elementów układanki w pionie
-	int SizeY;
+	int sizeY;
 	/// współrzędna X "pustego" elementu
-	int EmptyPieceX;
+	int emptyPieceX;
 	/// współrzędna Y "pustego" elementu
-	int EmptyPieceY; 
+	int emptyPieceY; 
 	/// szerokość jednego elementu układanki (w px)
 	int puzzlePieceWidth; 
 	/// wysokość jednego elementu układanki (w px)
 	int puzzlePieceHeight;
 	/// przerwa między elementami układanki w poziomie (w px)
-	int puzzlePieceSpacingX = 1;
+	int puzzlePieceSpacingX = 10;
 	/// przerwa między elementami układanki w pionie (w px)
-	int puzzlePieceSpacingY = 1;
+	int puzzlePieceSpacingY = 5;
 	/// układanka właściwa
 	QVector<PuzzlePiece> PuzzlePieces;
 	/// ilość ruchów wykonanych w danej grze
