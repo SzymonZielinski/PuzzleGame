@@ -2,17 +2,32 @@
 
 PuzzleArea::PuzzleArea(QWidget *parent)
 {
-	this->setParent(parent);
+	setParent(parent);
 	emptyPieceX = -1;
 	emptyPieceY = -1;
-
+	
 	//StartGame(5, 5);
 
-	//delete puzzleImage;
 }
 
 PuzzleArea::~PuzzleArea()
 {
+}
+
+void PuzzleArea::resizeEvent(QResizeEvent *event)
+{
+	int a = 2;
+	if (PuzzlePieces.count() > 0)
+	{
+		for (int i = 0; i < sizeX; i++)
+		{
+			for (int j = 0; j < sizeY; j++)
+			{
+				PuzzlePieces[i*sizeY + j].resizePuzzlePiece();
+			}
+		}
+	}
+	//QMessageBox::information(this, "Congratulations", "Resize event fired");
 }
 
 void PuzzleArea::movePuzzlePiece(const int x, const int y, bool shufflingMode)
@@ -78,21 +93,6 @@ bool PuzzleArea::setEmptyPiece(const int x, const int y)
 {
 	return setEmptyPieceX(x) && setEmptyPieceY(y);
 }
-
-// used for debugging only - delete
-//void PuzzleArea::mousePressEvent(QMouseEvent *qevent)
-//{
-//	this->puzzlePieceWidth = this->width() / this->sizeX;
-//	this->puzzlePieceHeight = this->width() / this->sizeY;
-//	if (qevent->button() == Qt::LeftButton)
-//	{
-//		int x = qevent->pos().x();
-//		int y = qevent->pos().y();
-//
-//		QString textStr = "X: " + QString::number(qevent->pos().x()) + ", Y: " + QString::number(qevent->pos().y());
-//		QMessageBox::information(this, "Information", textStr);
-//	}
-//}
 
 /**
 Parametr complexity określa, jak wiele ruchów zostaje wykonanych podczas mieszania (liczone jako complexity*ilość elementów układanki).
@@ -162,11 +162,11 @@ void PuzzleArea::startGame(const int elementsX, const int elementsY, QString fil
 {
 	moveCount = 0;
 	// jeśli nie podano nazwy pliku to sprawdzamy, czy już mamy jakiś obrazek załadowany
-	if (fileName.isNull() || fileName.isEmpty())
+	/*if (fileName.isNull() || fileName.isEmpty())
 	{
 		if (!puzzlePictureFileName.isNull() && !puzzlePictureFileName.isEmpty())
 			fileName = puzzlePictureFileName;
-	}
+	}*/
 
 	//QPalette framePalette = palette();
 	//framePalette.setColor(QPalette::Background, Qt::red);
@@ -174,78 +174,55 @@ void PuzzleArea::startGame(const int elementsX, const int elementsY, QString fil
 	//setPalette(framePalette);
 
 	PuzzlePieces.resize(0);
-	QImage puzzleImage;
+	//QImage puzzleImage;
 
 	// jeśli nie ma załadowanego obrazku lub podany plik nie jest obsługiwany, ustawiamy domyślny obrazek
 	if (fileName.isNull() || fileName.isEmpty() || !puzzleImage.load(fileName))
 	{
-		QString defaultImage = "";
-		for (int i = 0; i < defaultImageBase64.count(); i++)
+		if (puzzleImage.isNull())
 		{
-			defaultImage += defaultImageBase64[i];
+			QString defaultImage = "";
+			for (int i = 0; i < defaultImageBase64.count(); i++)
+			{
+				defaultImage += defaultImageBase64[i];
+			}
+			QByteArray imageData = QByteArray::fromBase64(defaultImage.toLatin1());
+			puzzleImage.loadFromData(imageData);
 		}
-		QByteArray imageData = QByteArray::fromBase64(defaultImage.toLatin1());
-		puzzleImage.loadFromData(imageData);
 	}
-	else
+	/*else
 	{
 		puzzlePictureFileName = fileName;
-	}
+	}*/
 
 	sizeX = elementsX;
 	sizeY = elementsY;
-	QSize newSize(this->size());
-	newSize.setWidth(newSize.width() - sizeX * puzzlePieceSpacingX);
-	newSize.setHeight(newSize.height() - sizeY * puzzlePieceSpacingY);
-	QPixmap imageMap = QPixmap::fromImage(puzzleImage).scaled(newSize, Qt::KeepAspectRatio);// QPixmap::fromImage(newPiece->pixmap()->toImage());
-	this->setBaseSize(imageMap.size());
+	QSize newSize(size());
+	newSize.setWidth(newSize.width() - (sizeX - 1) * puzzlePieceSpacingX);
+	newSize.setHeight(newSize.height() - (sizeY - 1) * puzzlePieceSpacingY);
+	QPixmap imageMap = QPixmap::fromImage(puzzleImage).scaled(newSize, Qt::KeepAspectRatio);
+	setBaseSize(imageMap.size());
 
-	QSize s1 = imageMap.size();
-	QSize s2 = this->size();
-	//imageMap.res
 	int puzzlePieceWidth = imageMap.width() / sizeY;// (this->width() < imageMap.width()) ? this->width() / this->sizeX : imageMap.width() / this->sizeX;
 	int puzzlePieceHeight = imageMap.height() / sizeX;//(this->height() < imageMap.height()) ? this->height() / this->sizeY : imageMap.height() / this->sizeY;
 
-	PuzzlePieces.resize(this->sizeX*this->sizeY);
-	//PuzzlePieces = new PuzzlePiece*[this->sizeX];
-	/*for (int i = 0; i < this->sizeX; i++)
-	PuzzlePieces[i] = new PuzzlePiece[this->sizeY];
-	*/
-	//auto layout = new QGridLayout();// QBoxLayout::LeftToRight);// QVBoxLayout();
-	//layout->setSpacing(1);
-	//layout->setmSetMinAndMaxthis->Size
-	//newGameArea->setLayout(layout);
+	PuzzlePieces.resize(sizeX*sizeY);
 	for (int i = 0; i < sizeX; i++)
 	{
-		//layout->setRowMinimumHeight(i, puzzlePieceHeight);// +1);
-		//layout->setRowStretch(i, 1);
-		//layout.row
 		for (int j = 0; j < sizeY; j++)
 		{
 			PuzzlePieces[i*sizeY + j].setPuzzleArea(this);
 			PuzzlePieces[i*sizeY + j].setCorrectPosition(i, j);
 			PuzzlePieces[i*sizeY + j].setCurrentPosition(i, j);
-			//QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
-			QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);// 100, 100);
+			QPixmap newMap = imageMap.copy(j * puzzlePieceWidth, i * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);
 			PuzzlePieces[i*sizeY + j].setPixmap(newMap);
 			PuzzlePieces[i*sizeY + j].setParent(this);
-			//PuzzlePieces[i*sizeY + j].setGeometry(j * puzzlePieceWidth + i * puzzlePieceSpacingX, j * puzzlePieceHeight + j * puzzlePieceSpacingY, puzzlePieceWidth, puzzlePieceHeight);
 			PuzzlePieces[i*sizeY + j].setGeometry(j * puzzlePieceWidth + j * puzzlePieceSpacingX, i * puzzlePieceHeight + i * puzzlePieceSpacingY, puzzlePieceWidth, puzzlePieceHeight);
 			PuzzlePieces[i*sizeY + j].show();
-			//layout->addWidget(&puzzleBoard[i][j], i, j);
-			//this->layout()->addWidget(&puzzleBoard[i][j]);
-			//puzzleBoard[i][j].setGeometry(j * puzzlePieceWidth + 10, i * puzzlePieceHeight + 10, puzzlePieceWidth, puzzlePieceHeight);
-			//this->layout()->invalidate();// repaint();
 		}
 	}
-	//PuzzlePieces[sizeX]
 	emptyPieceX = sizeX - 1;
 	emptyPieceY = sizeY - 1;
-
-	//PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(false);
-
-	/*PuzzlePiece* missingPiece = &PuzzlePieces[this->emptyPieceX*this->sizeY + this->emptyPieceY];
-	missingPiece->setVisible(false);*/
 }
 
 int PuzzleArea::getMoveCount()

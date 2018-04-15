@@ -56,4 +56,5 @@ public:
 	Przeładowanie operatora przypisania (do poprawnego działania std::swap)
 	*/
 	PuzzlePiece& operator=(PuzzlePiece piece);
+	void resizePuzzlePiece();
 };

@@ -55,7 +55,10 @@ private:
 	/// ilość ruchów wykonanych w danej grze
 	int moveCount = 0;
 
-//protected:
+	QImage puzzleImage;
+
+protected:
+	void resizeEvent(QResizeEvent *event);
 	//void mousePressEvent(QMouseEvent *qevent);
 public:
 	PuzzleArea(QWidget *parent = Q_NULLPTR);

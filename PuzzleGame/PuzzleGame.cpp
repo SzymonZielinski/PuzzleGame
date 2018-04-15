@@ -14,6 +14,8 @@ void PuzzleGame::loadImagePushButtonClick()
 	if (!fileName.isNull())
 	{
 		ui.puzzleGameArea->startGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), fileName);
+		QMessageBox::information(this, "Information", "Get ready!");
+		ui.puzzleGameArea->shuffle(ui.shuffleComplexitySpinBox->value());
 	}
 }
 
@@ -31,8 +33,12 @@ void PuzzleGame::startGamePushButtonClick()
 PuzzleGame::PuzzleGame(QWidget *parent)
 	: QMainWindow(parent)
 {
-	
 	ui.setupUi(this);
+	puzzleGameLayout = new QHBoxLayout;
+	ui.puzzleGameArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	puzzleGameLayout->addWidget(ui.puzzleGameArea);
+	puzzleGameLayout->addWidget(ui.settingsFrame);
+	ui.centralWidget->setLayout(puzzleGameLayout);
 
 	/**
 	Inicjalizacja generatora liczb pseudolosowych
@@ -48,5 +54,6 @@ PuzzleGame::PuzzleGame(QWidget *parent)
 
 PuzzleGame::~PuzzleGame()
 {
-	//	delete ui.puzzleGameArea;
+	delete ui.puzzleGameArea;
+	delete puzzleGameLayout;
 }

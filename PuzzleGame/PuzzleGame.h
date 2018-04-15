@@ -24,4 +24,5 @@ public slots:
 	
 private:
 	Ui::PuzzleGameClass ui;
+	QHBoxLayout *puzzleGameLayout;
 };

@@ -98,3 +98,8 @@ bool PuzzlePiece::isInCorrectPosition(const int x, const int y)
 {
 	return correctX == x && correctY == y;
 }
+
+void PuzzlePiece::resizePuzzlePiece()
+{
+
+}
