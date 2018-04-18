@@ -10,6 +10,12 @@
     <height>732</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>300</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>PuzzleGame</string>
   </property>
@@ -196,6 +202,19 @@
      </property>
      <property name="text">
       <string>Load an image</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="randomizeEmptyPieceCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>210</y>
+       <width>161</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Randomize empty piece</string>
      </property>
     </widget>
    </widget>

@@ -41,6 +41,9 @@ public:
 	Ustawia bieżącą pozycję danego elementu.
 	*/
 	void setCurrentPosition(const int positionX, const int positionY);
+
+	int getCorrectPositionX();
+	int getCorrectPositionY();
 	/**
 	Zamienia dane o widocznej części elementu miejscami.
 	*/

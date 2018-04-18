@@ -13,9 +13,7 @@ void PuzzleGame::loadImagePushButtonClick()
 
 	if (!fileName.isNull())
 	{
-		ui.puzzleGameArea->startGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), fileName);
-		QMessageBox::information(this, "Information", "Get ready!");
-		ui.puzzleGameArea->shuffle(ui.shuffleComplexitySpinBox->value());
+		ui.puzzleGameArea->startGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.shuffleComplexitySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked(), fileName);
 	}
 }
 
@@ -25,9 +23,7 @@ Rozpoczęcie nowej gry (przycisk) z bieżącymi ustawieniami.
 */
 void PuzzleGame::startGamePushButtonClick()
 {
-	ui.puzzleGameArea->startGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value());
-	QMessageBox::information(this, "Information", "Get ready!");
-	ui.puzzleGameArea->shuffle(ui.shuffleComplexitySpinBox->value());
+	ui.puzzleGameArea->startGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.shuffleComplexitySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked());
 }
 
 PuzzleGame::PuzzleGame(QWidget *parent)

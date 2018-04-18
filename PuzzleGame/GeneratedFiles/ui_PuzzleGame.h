@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
@@ -37,6 +38,7 @@ public:
     QSpinBox *shuffleComplexitySpinBox;
     QPushButton *startGamePushButton;
     QPushButton *loadImagePushButton;
+    QCheckBox *randomizeEmptyPieceCheckBox;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -46,6 +48,7 @@ public:
         if (PuzzleGameClass->objectName().isEmpty())
             PuzzleGameClass->setObjectName(QStringLiteral("PuzzleGameClass"));
         PuzzleGameClass->resize(1104, 732);
+        PuzzleGameClass->setMinimumSize(QSize(600, 300));
         centralWidget = new QWidget(PuzzleGameClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         puzzleGameArea = new PuzzleArea(centralWidget);
@@ -98,6 +101,9 @@ public:
         loadImagePushButton = new QPushButton(settingsFrame);
         loadImagePushButton->setObjectName(QStringLiteral("loadImagePushButton"));
         loadImagePushButton->setGeometry(QRect(60, 170, 161, 23));
+        randomizeEmptyPieceCheckBox = new QCheckBox(settingsFrame);
+        randomizeEmptyPieceCheckBox->setObjectName(QStringLiteral("randomizeEmptyPieceCheckBox"));
+        randomizeEmptyPieceCheckBox->setGeometry(QRect(70, 210, 161, 17));
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -120,6 +126,7 @@ public:
         PuzzleGameClass->setWindowTitle(QApplication::translate("PuzzleGameClass", "PuzzleGame", nullptr));
         startGamePushButton->setText(QApplication::translate("PuzzleGameClass", "Start Game", nullptr));
         loadImagePushButton->setText(QApplication::translate("PuzzleGameClass", "Load an image", nullptr));
+        randomizeEmptyPieceCheckBox->setText(QApplication::translate("PuzzleGameClass", "Randomize empty piece", nullptr));
     } // retranslateUi
 
 };

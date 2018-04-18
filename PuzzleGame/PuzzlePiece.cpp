@@ -54,6 +54,16 @@ void PuzzlePiece::setCorrectPosition(const int positionX, const int positionY)
 	correctY = positionY;
 }
 
+int PuzzlePiece::getCorrectPositionX()
+{
+	return correctX;
+}
+
+int PuzzlePiece::getCorrectPositionY()
+{
+	return correctY;
+}
+
 void PuzzlePiece::setCurrentPosition(const int positionX, const int positionY)
 {
 	currentX = positionX;
