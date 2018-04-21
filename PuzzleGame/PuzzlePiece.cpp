@@ -1,21 +1,8 @@
 ﻿#include<iostream>
 #include "PuzzlePiece.h"
 
-//void PuzzlePiece::resizeEvent(QResizeEvent *event)
-//{
-//	updatePosition(label, 0.5, 0.5); //50% , 50%
-//	updatePosition(lineEdit, 0.3, 0.7); //30% , 70%
-//	QWidget::resizeEvent(event);
-//}
-//
-//void PuzzlePiece::updatePosition(QWidget *widget, float xscale, float yscale) {
-//	int w = size().width();
-//	int h = size().height();
-//	widget->move(QPoint(w*xscale, h*yscale) - widget->rect().center());
-//}
 PuzzlePiece::PuzzlePiece()
 {
-
 }
 
 PuzzlePiece::PuzzlePiece(PuzzleAreaBase* puzzleArea)
@@ -23,10 +10,17 @@ PuzzlePiece::PuzzlePiece(PuzzleAreaBase* puzzleArea)
 	myPuzzleArea = puzzleArea;
 }
 
-PuzzlePiece::PuzzlePiece(const int correctPositionX, const int correctPositionY, const int width, const int height):correctX(correctPositionX), correctY(correctPositionY)
+PuzzlePiece::PuzzlePiece(int correctPositionX, int correctPositionY, int currentPositionX, int currentPositionY, PuzzleAreaBase* puzzleArea)
 {
-	setFixedWidth(width);
-	setFixedHeight(height);
+	if (correctPositionX >= 0)
+		correctX = correctPositionX;
+	if (correctPositionY >= 0)
+		correctX = correctPositionY;
+	if (currentPositionX >= 0)
+		correctX = currentPositionX;
+	if (currentPositionY >= 0)
+		correctX = currentPositionY;
+	myPuzzleArea = puzzleArea;
 }
 
 PuzzlePiece::PuzzlePiece(const PuzzlePiece& puzzlePiece)
@@ -36,7 +30,14 @@ PuzzlePiece::PuzzlePiece(const PuzzlePiece& puzzlePiece)
 	correctY = puzzlePiece.correctY;
 	currentX = puzzlePiece.currentX;
 	currentY = puzzlePiece.currentY;
-	this->setGeometry(puzzlePiece.geometry());
+	setGeometry(puzzlePiece.geometry());
+
+	if (puzzlePiece.pixmap())
+	{
+		QImage tmpImage = puzzlePiece.pixmap()->toImage();
+		setPixmap(QPixmap::fromImage(tmpImage));
+	}
+	setVisible(puzzlePiece.isVisible());
 }
 
 PuzzlePiece::~PuzzlePiece()
@@ -50,8 +51,10 @@ void PuzzlePiece::setPuzzleArea(PuzzleAreaBase* puzzleArea)
 
 void PuzzlePiece::setCorrectPosition(const int positionX, const int positionY)
 {
-	correctX = positionX;
-	correctY = positionY;
+	if (positionX >= 0)
+		correctX = positionX;
+	if (positionY >= 0)
+		correctY = positionY;
 }
 
 int PuzzlePiece::getCorrectPositionX()
@@ -66,8 +69,10 @@ int PuzzlePiece::getCorrectPositionY()
 
 void PuzzlePiece::setCurrentPosition(const int positionX, const int positionY)
 {
-	currentX = positionX;
-	currentY = positionY;
+	if (positionX >= 0)
+		currentX = positionX;
+	if (positionY >= 0)
+		currentY = positionY;
 }
 
 void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
@@ -75,41 +80,50 @@ void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
 	myPuzzleArea->movePuzzlePiece(currentX, currentY);
 }
 
+/*
+W poprzedniej wersji używano nieco zmodyfikowanej wersji, aby korzystać z std::swap. W obecnej wersji zostało to uproszczone i obecnie używamy tylko metody swapPuzzlePiece.
+Operator przypisania już był napisany, więc go zostawiłem.
+*/
 PuzzlePiece& PuzzlePiece::operator=(PuzzlePiece puzzlePiece)
 {
 	myPuzzleArea = puzzlePiece.myPuzzleArea;
 	correctX = puzzlePiece.correctX;
 	correctY = puzzlePiece.correctY;
-
-	//wartości bieżącej pozycji nie należy przepisywać, gdyż zamieniamy elementy miejscami, więc bieżąca pozycja się nie zmienia
-	//currentX = puzzlePiece.currentX;
-	//currentY = puzzlePiece.currentY;
+	currentX = puzzlePiece.correctX;
+	currentY = puzzlePiece.correctY;
 	
+	if (puzzlePiece.pixmap())
+	{
+		QImage tmpImage = puzzlePiece.pixmap()->toImage();
+		setPixmap(QPixmap::fromImage(tmpImage));
+	}
+	setVisible(puzzlePiece.isVisible());
 	setGeometry(puzzlePiece.geometry());
 	return *this;
 }
 
-void PuzzlePiece::swapVisibleImageData(PuzzlePiece& puzzlePiece)
+void PuzzlePiece::swapPuzzlePiece(PuzzlePiece& puzzlePiece)
 {
-	QImage tmpImage = puzzlePiece.pixmap()->toImage();
-	puzzlePiece.setPixmap(*pixmap());
-	setPixmap(QPixmap::fromImage(tmpImage));
+	// zamieniamy elementy tylko wtedy, gdy należą do tej samej układanki
+	if (myPuzzleArea == puzzlePiece.myPuzzleArea)
+	{
+		std::swap(correctX, puzzlePiece.correctX);
+		std::swap(correctY, puzzlePiece.correctY);
 
-	bool visibility = puzzlePiece.isVisible();
-	puzzlePiece.setVisible(isVisible());
-	setVisible(visibility);
+		if (puzzlePiece.pixmap())
+		{
+			QImage tmpImage = puzzlePiece.pixmap()->toImage();
+			puzzlePiece.setPixmap(*pixmap());
+			setPixmap(QPixmap::fromImage(tmpImage));
+		}
 
-	QRect tmpGeometry = puzzlePiece.geometry();
-	puzzlePiece.setGeometry(geometry());
-	setGeometry(tmpGeometry);
+		bool visibility = puzzlePiece.isVisible();
+		puzzlePiece.setVisible(isVisible());
+		setVisible(visibility);
+	}
 }
 
 bool PuzzlePiece::isInCorrectPosition(const int x, const int y)
 {
 	return correctX == x && correctY == y;
-}
-
-void PuzzlePiece::resizePuzzlePiece()
-{
-
 }

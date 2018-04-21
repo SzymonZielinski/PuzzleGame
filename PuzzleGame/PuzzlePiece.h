@@ -9,23 +9,22 @@ class PuzzlePiece : public QLabel
 {
 private:
 	/// wskaźnik do obszaru całej układanki
-	PuzzleAreaBase* myPuzzleArea;
+	PuzzleAreaBase* myPuzzleArea = Q_NULLPTR;
 	/// właściwa pozycja X elementu
-	int correctX;
+	int correctX = -1;
 	/// właściwa pozycja Y elementu
-	int correctY;
+	int correctY = -1;
 	/// bieżąca pozycja X elementu
-	int currentX;
+	int currentX = -1;
 	/// bieżąca pozycja Y elementu
-	int currentY;
+	int currentY = -1;
 protected:
-	//void resizeEvent(QResizeEvent *event);
 	/// Kliknięcie myszą na elemencie układanki powoduje przesunięcie go w wolne miejsce obok (o ile to możliwe).
 	void mousePressEvent(QMouseEvent *qevent);
 public:
 	PuzzlePiece();
 	PuzzlePiece(PuzzleAreaBase* puzzleArea);
-	PuzzlePiece(const int correctPositionX, const int correctPositionY, const int width, const int height);
+	PuzzlePiece(int correctPositionX, int correctPositionY, int currentPositionX, int currentPositionY, PuzzleAreaBase* puzzleArea);
 	PuzzlePiece(const PuzzlePiece& puzzlePiece);
 	~PuzzlePiece();
 
@@ -41,13 +40,18 @@ public:
 	Ustawia bieżącą pozycję danego elementu.
 	*/
 	void setCurrentPosition(const int positionX, const int positionY);
-
+	/**
+	Zwraca informację o poprawnej pozycji X elementu
+	*/
 	int getCorrectPositionX();
+	/**
+	Zwraca informację o poprawnej pozycji Y elementu
+	*/
 	int getCorrectPositionY();
 	/**
-	Zamienia dane o widocznej części elementu miejscami.
+	Zamienia dwa elementy miejscami.
 	*/
-	void swapVisibleImageData(PuzzlePiece& puzzlePiece);
+	void swapPuzzlePiece(PuzzlePiece& puzzlePiece);
 	/**
 	Zwraca informację, czy element znajduje się na właściwej pozycji.
 	\param x Współrzędna x elementu
@@ -56,8 +60,7 @@ public:
 	*/
 	bool isInCorrectPosition(const int x, const int y);
 	/**
-	Przeładowanie operatora przypisania (do poprawnego działania std::swap)
+	\brief Przeładowanie operatora przypisania (do poprawnego działania std::swap)
 	*/
 	PuzzlePiece& operator=(PuzzlePiece piece);
-	void resizePuzzlePiece();
 };

@@ -6,24 +6,19 @@ Jeśli załadowano nowy obrazek, rozpoczynamy grę.
 */
 void PuzzleGame::loadImagePushButtonClick()
 {
-	QString fileName = QFileDialog::getOpenFileName(this,
-		tr("Open Image"),
-		QDir::currentPath(),
-		tr("Image Files (*.png *.jpg *.bmp)"));
-
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), QDir::currentPath(),tr("Image Files (*.png *.jpg *.bmp)"));
 	if (!fileName.isNull())
 	{
-		ui.puzzleGameArea->startGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.shuffleComplexitySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked(), fileName);
+		ui.puzzleGameArea->newGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.difficultySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked(), fileName);
 	}
 }
 
 /**
 Rozpoczęcie nowej gry (przycisk) z bieżącymi ustawieniami.
-
 */
 void PuzzleGame::startGamePushButtonClick()
 {
-	ui.puzzleGameArea->startGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.shuffleComplexitySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked());
+	ui.puzzleGameArea->newGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.difficultySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked(), "", ui.puzzleSpacingXSpinBox->value(), ui.puzzleSpacingYSpinBox->value());
 }
 
 PuzzleGame::PuzzleGame(QWidget *parent)
@@ -46,6 +41,11 @@ PuzzleGame::PuzzleGame(QWidget *parent)
 	*/
 	connect(ui.startGamePushButton, SIGNAL(clicked()), this, SLOT(startGamePushButtonClick()));
 	connect(ui.loadImagePushButton, SIGNAL(clicked()), this, SLOT(loadImagePushButtonClick()));
+
+	/**
+	Wyświetlenie planszy z grą - bez rozpoczynania gry (ostatni parametr - false)
+	*/
+	ui.puzzleGameArea->newGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.difficultySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked(), "", ui.puzzleSpacingXSpinBox->value(), ui.puzzleSpacingYSpinBox->value(), false);
 }
 
 PuzzleGame::~PuzzleGame()

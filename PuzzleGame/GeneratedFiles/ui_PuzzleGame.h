@@ -16,6 +16,7 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -35,10 +36,17 @@ public:
     QFrame *settingsFrame;
     QSpinBox *puzzleElementsYSpinBox;
     QSpinBox *puzzleElementsXSpinBox;
-    QSpinBox *shuffleComplexitySpinBox;
+    QSpinBox *difficultySpinBox;
     QPushButton *startGamePushButton;
     QPushButton *loadImagePushButton;
     QCheckBox *randomizeEmptyPieceCheckBox;
+    QLabel *difficultyLabel;
+    QLabel *rowsLabel;
+    QLabel *columnsLabel;
+    QSpinBox *puzzleSpacingXSpinBox;
+    QSpinBox *puzzleSpacingYSpinBox;
+    QLabel *puzzleSpacingYLabel;
+    QLabel *puzzleSpacingXLabel;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -75,35 +83,62 @@ public:
         puzzleGameArea->setFrameShadow(QFrame::Raised);
         settingsFrame = new QFrame(centralWidget);
         settingsFrame->setObjectName(QStringLiteral("settingsFrame"));
-        settingsFrame->setGeometry(QRect(780, 140, 291, 261));
+        settingsFrame->setGeometry(QRect(780, 30, 291, 291));
         settingsFrame->setMinimumSize(QSize(280, 260));
         settingsFrame->setFrameShape(QFrame::StyledPanel);
         settingsFrame->setFrameShadow(QFrame::Raised);
         puzzleElementsYSpinBox = new QSpinBox(settingsFrame);
         puzzleElementsYSpinBox->setObjectName(QStringLiteral("puzzleElementsYSpinBox"));
-        puzzleElementsYSpinBox->setGeometry(QRect(210, 120, 42, 22));
+        puzzleElementsYSpinBox->setGeometry(QRect(220, 100, 42, 22));
         puzzleElementsYSpinBox->setMinimum(2);
         puzzleElementsYSpinBox->setMaximum(100);
         puzzleElementsXSpinBox = new QSpinBox(settingsFrame);
         puzzleElementsXSpinBox->setObjectName(QStringLiteral("puzzleElementsXSpinBox"));
-        puzzleElementsXSpinBox->setGeometry(QRect(210, 80, 42, 22));
+        puzzleElementsXSpinBox->setGeometry(QRect(220, 70, 42, 22));
         puzzleElementsXSpinBox->setMinimum(2);
         puzzleElementsXSpinBox->setMaximum(100);
-        shuffleComplexitySpinBox = new QSpinBox(settingsFrame);
-        shuffleComplexitySpinBox->setObjectName(QStringLiteral("shuffleComplexitySpinBox"));
-        shuffleComplexitySpinBox->setGeometry(QRect(210, 40, 41, 22));
-        shuffleComplexitySpinBox->setMinimum(1);
-        shuffleComplexitySpinBox->setMaximum(10);
-        shuffleComplexitySpinBox->setValue(1);
+        difficultySpinBox = new QSpinBox(settingsFrame);
+        difficultySpinBox->setObjectName(QStringLiteral("difficultySpinBox"));
+        difficultySpinBox->setGeometry(QRect(220, 40, 41, 22));
+        difficultySpinBox->setMinimum(1);
+        difficultySpinBox->setMaximum(10);
+        difficultySpinBox->setValue(1);
         startGamePushButton = new QPushButton(settingsFrame);
         startGamePushButton->setObjectName(QStringLiteral("startGamePushButton"));
-        startGamePushButton->setGeometry(QRect(80, 40, 75, 23));
+        startGamePushButton->setGeometry(QRect(10, 10, 251, 23));
         loadImagePushButton = new QPushButton(settingsFrame);
         loadImagePushButton->setObjectName(QStringLiteral("loadImagePushButton"));
-        loadImagePushButton->setGeometry(QRect(60, 170, 161, 23));
+        loadImagePushButton->setGeometry(QRect(10, 160, 251, 23));
         randomizeEmptyPieceCheckBox = new QCheckBox(settingsFrame);
         randomizeEmptyPieceCheckBox->setObjectName(QStringLiteral("randomizeEmptyPieceCheckBox"));
-        randomizeEmptyPieceCheckBox->setGeometry(QRect(70, 210, 161, 17));
+        randomizeEmptyPieceCheckBox->setGeometry(QRect(10, 130, 161, 17));
+        difficultyLabel = new QLabel(settingsFrame);
+        difficultyLabel->setObjectName(QStringLiteral("difficultyLabel"));
+        difficultyLabel->setGeometry(QRect(10, 40, 171, 16));
+        rowsLabel = new QLabel(settingsFrame);
+        rowsLabel->setObjectName(QStringLiteral("rowsLabel"));
+        rowsLabel->setGeometry(QRect(10, 70, 171, 16));
+        columnsLabel = new QLabel(settingsFrame);
+        columnsLabel->setObjectName(QStringLiteral("columnsLabel"));
+        columnsLabel->setGeometry(QRect(10, 100, 171, 16));
+        puzzleSpacingXSpinBox = new QSpinBox(settingsFrame);
+        puzzleSpacingXSpinBox->setObjectName(QStringLiteral("puzzleSpacingXSpinBox"));
+        puzzleSpacingXSpinBox->setGeometry(QRect(220, 200, 42, 22));
+        puzzleSpacingXSpinBox->setMinimum(0);
+        puzzleSpacingXSpinBox->setMaximum(20);
+        puzzleSpacingXSpinBox->setValue(1);
+        puzzleSpacingYSpinBox = new QSpinBox(settingsFrame);
+        puzzleSpacingYSpinBox->setObjectName(QStringLiteral("puzzleSpacingYSpinBox"));
+        puzzleSpacingYSpinBox->setGeometry(QRect(220, 230, 42, 22));
+        puzzleSpacingYSpinBox->setMinimum(0);
+        puzzleSpacingYSpinBox->setMaximum(20);
+        puzzleSpacingYSpinBox->setValue(1);
+        puzzleSpacingYLabel = new QLabel(settingsFrame);
+        puzzleSpacingYLabel->setObjectName(QStringLiteral("puzzleSpacingYLabel"));
+        puzzleSpacingYLabel->setGeometry(QRect(10, 230, 171, 16));
+        puzzleSpacingXLabel = new QLabel(settingsFrame);
+        puzzleSpacingXLabel->setObjectName(QStringLiteral("puzzleSpacingXLabel"));
+        puzzleSpacingXLabel->setGeometry(QRect(10, 200, 171, 16));
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -125,8 +160,13 @@ public:
     {
         PuzzleGameClass->setWindowTitle(QApplication::translate("PuzzleGameClass", "PuzzleGame", nullptr));
         startGamePushButton->setText(QApplication::translate("PuzzleGameClass", "Start Game", nullptr));
-        loadImagePushButton->setText(QApplication::translate("PuzzleGameClass", "Load an image", nullptr));
+        loadImagePushButton->setText(QApplication::translate("PuzzleGameClass", "Load an image from a file", nullptr));
         randomizeEmptyPieceCheckBox->setText(QApplication::translate("PuzzleGameClass", "Randomize empty piece", nullptr));
+        difficultyLabel->setText(QApplication::translate("PuzzleGameClass", "Difficulty (1 - very easy, 10 - hard):", nullptr));
+        rowsLabel->setText(QApplication::translate("PuzzleGameClass", "Number of rows:", nullptr));
+        columnsLabel->setText(QApplication::translate("PuzzleGameClass", "Number of columns:", nullptr));
+        puzzleSpacingYLabel->setText(QApplication::translate("PuzzleGameClass", "Spacing between columns:", nullptr));
+        puzzleSpacingXLabel->setText(QApplication::translate("PuzzleGameClass", "Spacing between rows:", nullptr));
     } // retranslateUi
 
 };

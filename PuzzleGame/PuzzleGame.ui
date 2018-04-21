@@ -110,9 +110,9 @@
     <property name="geometry">
      <rect>
       <x>780</x>
-      <y>140</y>
+      <y>30</y>
       <width>291</width>
-      <height>261</height>
+      <height>291</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -130,8 +130,8 @@
     <widget class="QSpinBox" name="puzzleElementsYSpinBox">
      <property name="geometry">
       <rect>
-       <x>210</x>
-       <y>120</y>
+       <x>220</x>
+       <y>100</y>
        <width>42</width>
        <height>22</height>
       </rect>
@@ -146,8 +146,8 @@
     <widget class="QSpinBox" name="puzzleElementsXSpinBox">
      <property name="geometry">
       <rect>
-       <x>210</x>
-       <y>80</y>
+       <x>220</x>
+       <y>70</y>
        <width>42</width>
        <height>22</height>
       </rect>
@@ -159,10 +159,10 @@
       <number>100</number>
      </property>
     </widget>
-    <widget class="QSpinBox" name="shuffleComplexitySpinBox">
+    <widget class="QSpinBox" name="difficultySpinBox">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>220</x>
        <y>40</y>
        <width>41</width>
        <height>22</height>
@@ -181,9 +181,9 @@
     <widget class="QPushButton" name="startGamePushButton">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>40</y>
-       <width>75</width>
+       <x>10</x>
+       <y>10</y>
+       <width>251</width>
        <height>23</height>
       </rect>
      </property>
@@ -194,27 +194,130 @@
     <widget class="QPushButton" name="loadImagePushButton">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>170</y>
-       <width>161</width>
+       <x>10</x>
+       <y>160</y>
+       <width>251</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
-      <string>Load an image</string>
+      <string>Load an image from a file</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="randomizeEmptyPieceCheckBox">
      <property name="geometry">
       <rect>
-       <x>70</x>
-       <y>210</y>
+       <x>10</x>
+       <y>130</y>
        <width>161</width>
        <height>17</height>
       </rect>
      </property>
      <property name="text">
       <string>Randomize empty piece</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="difficultyLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Difficulty (1 - very easy, 10 - hard):</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="rowsLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Number of rows:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="columnsLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Number of columns:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="puzzleSpacingXSpinBox">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>200</y>
+       <width>42</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="value">
+      <number>1</number>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="puzzleSpacingYSpinBox">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>230</y>
+       <width>42</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="value">
+      <number>1</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="puzzleSpacingYLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>230</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Spacing between columns:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="puzzleSpacingXLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Spacing between rows:</string>
      </property>
     </widget>
    </widget>
