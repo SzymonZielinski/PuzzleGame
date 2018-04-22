@@ -21,6 +21,16 @@ void PuzzleGame::startGamePushButtonClick()
 	ui.puzzleGameArea->newGame(ui.puzzleElementsXSpinBox->value(), ui.puzzleElementsYSpinBox->value(), ui.difficultySpinBox->value(), ui.randomizeEmptyPieceCheckBox->isChecked(), "", ui.puzzleSpacingXSpinBox->value(), ui.puzzleSpacingYSpinBox->value());
 }
 
+void PuzzleGame::showAnimationsCheckBoxStateChanged(bool checkState)
+{
+	ui.puzzleGameArea->setAnimation(checkState);
+}
+
+void PuzzleGame::animationSpeedSpinBoxValueChanged(int animationSpeed)
+{
+	ui.puzzleGameArea->setAnimationSpeed(animationSpeed);// ui.animationSpeedSpinBox->value());
+}
+
 PuzzleGame::PuzzleGame(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -40,7 +50,9 @@ PuzzleGame::PuzzleGame(QWidget *parent)
 	Podłączanie slotów do przycisków
 	*/
 	connect(ui.startGamePushButton, SIGNAL(clicked()), this, SLOT(startGamePushButtonClick()));
-	connect(ui.loadImagePushButton, SIGNAL(clicked()), this, SLOT(loadImagePushButtonClick()));
+	connect(ui.loadImagePushButton, SIGNAL(clicked()), this, SLOT(loadImagePushButtonClick()));	
+	connect(ui.showAnimationsCheckBox, SIGNAL(toggled(bool)), this, SLOT(showAnimationsCheckBoxStateChanged(bool)));
+	connect(ui.animationSpeedSpinBox, SIGNAL(valueChanged(int)), this, SLOT(animationSpeedSpinBoxValueChanged(int)));
 
 	/**
 	Wyświetlenie planszy z grą - bez rozpoczynania gry (ostatni parametr - false)

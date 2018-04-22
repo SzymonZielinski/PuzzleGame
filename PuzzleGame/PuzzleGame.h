@@ -21,6 +21,8 @@ public slots:
 	\brief Ładowanie obrazku puzzli z pliku (przycisk).
 	*/
 	void loadImagePushButtonClick();
+	void showAnimationsCheckBoxStateChanged(bool checkState);
+	void animationSpeedSpinBoxValueChanged(int animationSpeed);
 	
 private:
 	Ui::PuzzleGameClass ui;

@@ -18,6 +18,7 @@ private:
 	int currentX = -1;
 	/// bieżąca pozycja Y elementu
 	int currentY = -1;
+	
 protected:
 	/// Kliknięcie myszą na elemencie układanki powoduje przesunięcie go w wolne miejsce obok (o ile to możliwe).
 	void mousePressEvent(QMouseEvent *qevent);

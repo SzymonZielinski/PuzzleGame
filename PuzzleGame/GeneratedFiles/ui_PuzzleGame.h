@@ -47,6 +47,9 @@ public:
     QSpinBox *puzzleSpacingYSpinBox;
     QLabel *puzzleSpacingYLabel;
     QLabel *puzzleSpacingXLabel;
+    QCheckBox *showAnimationsCheckBox;
+    QSpinBox *animationSpeedSpinBox;
+    QLabel *animationSpeedLabel;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -83,7 +86,7 @@ public:
         puzzleGameArea->setFrameShadow(QFrame::Raised);
         settingsFrame = new QFrame(centralWidget);
         settingsFrame->setObjectName(QStringLiteral("settingsFrame"));
-        settingsFrame->setGeometry(QRect(780, 30, 291, 291));
+        settingsFrame->setGeometry(QRect(780, 30, 291, 361));
         settingsFrame->setMinimumSize(QSize(280, 260));
         settingsFrame->setFrameShape(QFrame::StyledPanel);
         settingsFrame->setFrameShadow(QFrame::Raised);
@@ -139,6 +142,20 @@ public:
         puzzleSpacingXLabel = new QLabel(settingsFrame);
         puzzleSpacingXLabel->setObjectName(QStringLiteral("puzzleSpacingXLabel"));
         puzzleSpacingXLabel->setGeometry(QRect(10, 200, 171, 16));
+        showAnimationsCheckBox = new QCheckBox(settingsFrame);
+        showAnimationsCheckBox->setObjectName(QStringLiteral("showAnimationsCheckBox"));
+        showAnimationsCheckBox->setGeometry(QRect(10, 270, 161, 17));
+        showAnimationsCheckBox->setChecked(true);
+        animationSpeedSpinBox = new QSpinBox(settingsFrame);
+        animationSpeedSpinBox->setObjectName(QStringLiteral("animationSpeedSpinBox"));
+        animationSpeedSpinBox->setGeometry(QRect(211, 300, 51, 22));
+        animationSpeedSpinBox->setMinimum(50);
+        animationSpeedSpinBox->setMaximum(1000);
+        animationSpeedSpinBox->setSingleStep(50);
+        animationSpeedSpinBox->setValue(100);
+        animationSpeedLabel = new QLabel(settingsFrame);
+        animationSpeedLabel->setObjectName(QStringLiteral("animationSpeedLabel"));
+        animationSpeedLabel->setGeometry(QRect(10, 300, 171, 16));
         PuzzleGameClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PuzzleGameClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -167,6 +184,8 @@ public:
         columnsLabel->setText(QApplication::translate("PuzzleGameClass", "Number of columns:", nullptr));
         puzzleSpacingYLabel->setText(QApplication::translate("PuzzleGameClass", "Spacing between columns:", nullptr));
         puzzleSpacingXLabel->setText(QApplication::translate("PuzzleGameClass", "Spacing between rows:", nullptr));
+        showAnimationsCheckBox->setText(QApplication::translate("PuzzleGameClass", "Show animations", nullptr));
+        animationSpeedLabel->setText(QApplication::translate("PuzzleGameClass", "Animation speed (ms):", nullptr));
     } // retranslateUi
 
 };

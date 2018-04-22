@@ -50,6 +50,9 @@
     <QtMoc Include="PuzzleGame.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="PuzzleArea.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="PuzzleGame.ui">
@@ -63,9 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PuzzlePiece.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PuzzleArea.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PuzzleAreaBase.h">

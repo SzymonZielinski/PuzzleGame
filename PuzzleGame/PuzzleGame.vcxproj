@@ -131,7 +131,7 @@
     <QtRcc Include="PuzzleGame.qrc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PuzzleArea.h" />
+    <QtMoc Include="PuzzleArea.h" />
     <ClInclude Include="PuzzleAreaBase.h" />
     <ClInclude Include="PuzzlePiece.h" />
   </ItemGroup>

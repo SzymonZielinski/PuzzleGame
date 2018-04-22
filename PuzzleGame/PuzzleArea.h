@@ -8,6 +8,7 @@ Klasa reprezentuje obszar właściwy pola gry (układanki). Dziedziczy po QFrame
 */
 class PuzzleArea : public QFrame, public PuzzleAreaBase
 {
+	Q_OBJECT
 private:
 	/**
 	Domyślny obrazek - zdjęcie wnętrza Gmachu Głównego Politechniki Warszawskiej. Format JPG zakodowany w Base64 zapisany w QVector<QString>
@@ -39,7 +40,10 @@ private:
 	static const int minPuzzlePieceSpacingY = 0;
 	static const int maxPuzzlePieceSpacingX = 20;
 	static const int maxPuzzlePieceSpacingY = 20;
-
+	static const int minAnimationSpeed = 50;
+	static const int maxAnimationSpeed = 1000;
+	static const int defaultAnimationSpeed = 100;
+	
 	/// nazwa pliku obrazku układanki
 	QString puzzlePictureFileName;
 	/// ilość wierszy układanki (X - wiersze, Y - kolumny)
@@ -68,12 +72,24 @@ private:
 	QImage puzzleImage;
 	///	Timer do mierzenia czasu gry
 	QElapsedTimer timer;
-
+	qint64 timeElapsed;
+	QSequentialAnimationGroup *animationGroup = new QSequentialAnimationGroup();
+	QPropertyAnimation* animation;
+	bool useAnimations = true;
+	int lastX = -1;
+	int lastY = -1;
+	bool animationInProgress = false;
+	int animationSpeed = defaultAnimationSpeed;
+	int difficultyLevel = defaultDifficulty;
 protected:
 	/**
 	Zdarzenie - zmiana rozmiaru układanki (np. zmiana rozmiaru okna) powoduje przeskalowanie układanki
 	*/
 	void resizeEvent(QResizeEvent *event);
+protected slots:
+	void swapPiecesAfterAnimation();// int x, int y);
+	void endGame();
+	void veryBeginGame();
 public:
 	PuzzleArea(QWidget *parent = Q_NULLPTR);
 	~PuzzleArea();
@@ -84,6 +100,8 @@ public:
 	\param shufflingMode czy jesteśmy w trybie sortowania? Jeśli true to nie sprawdza, czy gra się zakończyła (układanka jest ułożona).
 	*/
 	void movePuzzlePiece(const int x, const int y, bool shufflingMode = false);
+	void checkIfFinished();
+	void showSummary();
 	/** Zwraca pozycję X "pustego" elementu */
 	int getEmptyPieceX();
 	/** Zwraca pozycję Y "pustego" elementu */
@@ -103,7 +121,7 @@ public:
 	Sprawdza, czy układanka została ułożona
 	\return true jeśli układanka jest ułożona, false jeśli nie
 	*/
-	bool isFinished();
+	bool isFinished(bool shufflingMode = false);
 	/**
 	Dostosowuje wielkość elementów do obszaru dostępnego dla układanki.
 	*/
@@ -128,10 +146,13 @@ public:
 	/**
 	Rozpoczyna grę i zadanym stopniem trudności i z losowaniem miejsca pustego elementu lub bez.
 	*/
-	void beginGame(int difficulty, bool randomizeEmptyPiece);
+	void beginGame(bool randomizeEmptyPiece);
+	void startGame();
 	/**
 	Kończy grę i zwraca czas jej trwania (w ms).
 	\return Czas trwania gry w ms.
 	*/
 	qint64 finishGame();
+	void setAnimation(bool animate);
+	bool setAnimationSpeed(int speed);
 };

@@ -19,27 +19,85 @@ void PuzzleArea::resizeEvent(QResizeEvent *event)
 
 void PuzzleArea::movePuzzlePiece(const int x, const int y, bool shufflingMode)
 {
-	if (!gameOver)
+	if (!gameOver && !animationInProgress)
 	{
 		// przesuwamy element tylko wtedy, gdy to możliwe (tzn. sąsiadujacy element jest pusty)
 		if (!(abs(x - emptyPieceX) == 1 && abs(y - emptyPieceY) == 0) != !(abs(y - emptyPieceY) == 1 && abs(x - emptyPieceX) == 0))
 		{
-			// zamieniamy elementy miejscami
-			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].swapPuzzlePiece(PuzzlePieces[x*sizeY + y]);
+			if (useAnimations && !shufflingMode)
+			{				
+				animation = new QPropertyAnimation(&PuzzlePieces[x*sizeY + y], "geometry");
+				animation->setDuration(animationSpeed);
+				animation->setStartValue(PuzzlePieces[x*sizeY + y].geometry());
+				animation->setEndValue(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
+				PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGeometry(PuzzlePieces[x*sizeY + y].geometry());
+				//connect(animation, SIGNAL(finished()), this, SLOT(swapPiecesAfterAnimation());
+				connect(animation, SIGNAL(finished()), this, SLOT(swapPiecesAfterAnimation()));
+				lastX = x;
+				lastY = y;
+				//connect(animation, SIGNAL(stateChanged()), this, SLOT(swapPiecesAfterAnimation()));// x, y)));
+				//connect(animation, SIGNAL(finished()), this, SLOT(swapPiecesAfterAnimation()));// x, y)));
+				//animationGroup->addAnimation(animation);
+				animationInProgress = true;
+				animation->start();// QAbstractAnimation::DeleteWhenStopped);
+			}
+			else
+			{
+				// zamieniamy elementy miejscami
+				PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].swapPuzzlePiece(PuzzlePieces[x*sizeY + y]);
+				// ustawiamy nowe współrzędne dla "pustego" elementu
+				setEmptyPiece(x, y);
+			}
+						
 			// zwiększamy licznik ruchów, jeśli gra się toczy
 			if (!shufflingMode)
 				moveCount++;
-			// ustawiamy nowe współrzędne dla "pustego" elementu
-			setEmptyPiece(x, y);
 		}
 		// jeśli gra była w trakcie i układanka została rozwiązana, wyświetlamy komunikat
-		if (!shufflingMode && isFinished())
+		if (!shufflingMode)
+			checkIfFinished();
+	}
+}
+
+void PuzzleArea::checkIfFinished()
+{
+	if (isFinished())
+	{
+		timeElapsed = finishGame() / 1000;
+		if (useAnimations)
 		{
-			qint64 timeElapsed = finishGame() / 1000;
-			QString finishMessage = "You solved the puzzle!\nIt took you " + QString::number(moveCount) + " moves\nor "+QString::number(timeElapsed) + " seconds.";
-			QMessageBox::information(this, "Congratulations", finishMessage);
+			animationInProgress = true;
+			//animation = new QPropertyAnimation(&PuzzlePieces[emptyPieceX*sizeY + emptyPieceY], "geometry");
+			//animation->setDuration(animationSpeed);
+			//QRect rect = PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry();// new QRect(new QPoint(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].x() - puzzlePieceWidth - puzzlePieceSpacingY, PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].y()), new QPoint(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].x() - puzzlePieceWidth - puzzlePieceSpacingY, PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].y() + puzzleSpacingX));
+			//rect.setX(rect.x()-puzzlePieceWidth - puzzlePieceSpacingY);
+			//animation->setStartValue(rect);// PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
+			//animation->setEndValue(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
+			//animation->start(QPropertyAnimation::DeleteWhenStopped);
+
+			QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect(&PuzzlePieces[emptyPieceX*sizeY + emptyPieceY]);
+			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(eff);
+			animation = new QPropertyAnimation(eff, "opacity");
+			animation->setDuration(animationSpeed);
+			animation->setStartValue(0);
+			animation->setEndValue(1);
+			animation->setEasingCurve(QEasingCurve::InBack);
+			connect(animation, SIGNAL(finished()), this, SLOT(endGame()));
+			animation->start(QPropertyAnimation::DeleteWhenStopped);
+			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
+		}
+		else
+		{
+			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
+			showSummary();
 		}
 	}
+}
+
+void PuzzleArea::showSummary()
+{
+	QString finishMessage = "You solved the puzzle!\nIt took you " + QString::number(moveCount) + " moves\nor " + QString::number(timeElapsed) + " seconds.";
+	QMessageBox::information(this, "Congratulations", finishMessage);
 }
 
 int PuzzleArea::getEmptyPieceX()
@@ -97,7 +155,7 @@ void PuzzleArea::shuffle(int difficulty)
 	if (difficulty < 1 || difficulty > 1000)
 		difficulty = defaultDifficulty;
 	// mieszamy tak długo, aż układanka nie będzie w stanie "rozwiązanym"
-	while (isFinished())
+	while (isFinished(true))
 	{
 		int currentX = emptyPieceX;
 		int currentY = emptyPieceY;
@@ -139,9 +197,10 @@ void PuzzleArea::shuffle(int difficulty)
 		}
 		/*PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(false);*/
 	}
+	//animationGroup->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-bool PuzzleArea::isFinished()
+bool PuzzleArea::isFinished(bool shufflingMode)
 {
 	for (int i = 0; i < sizeX; i++)
 	{
@@ -151,7 +210,6 @@ bool PuzzleArea::isFinished()
 				return false;
 		}
 	}
-	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
 	return true;
 }
 
@@ -186,6 +244,8 @@ void PuzzleArea::newGame(int elementsX, int elementsY, int difficulty, bool rand
 	//framePalette.setColor(QPalette::Background, Qt::red);
 	//setAutoFillBackground(true);
 	//setPalette(framePalette);
+	difficultyLevel = difficulty;
+	PuzzlePieces.resize(0);
 
 	// jeśli nie ma załadowanego obrazku lub podany plik nie jest obsługiwany, ustawiamy domyślny obrazek
 	if (fileName.isNull() || fileName.isEmpty() || !puzzleImage.load(fileName))
@@ -258,7 +318,7 @@ void PuzzleArea::newGame(int elementsX, int elementsY, int difficulty, bool rand
 	resizePuzzlePieces();
 
 	if (startImmediately)
-		beginGame(difficulty, randomizeEmptyPiece);
+		beginGame(randomizeEmptyPiece);
 }
 
 int PuzzleArea::getMoveCount()
@@ -266,9 +326,11 @@ int PuzzleArea::getMoveCount()
 	return moveCount;
 }
 
-void PuzzleArea::beginGame(int difficulty, bool randomizeEmptyPiece)
+void PuzzleArea::beginGame(bool randomizeEmptyPiece)
 {
 	gameOver = false;
+	animationInProgress = false;
+
 	// wyświetlamy komunikat
 	QMessageBox::information(this, "Information", "Get ready!");
 	// domyślnie ustawiamy pusty element na dolny prawy róg
@@ -281,10 +343,33 @@ void PuzzleArea::beginGame(int difficulty, bool randomizeEmptyPiece)
 		emptyY = qrand() % sizeY;
 	}
 	setEmptyPiece(emptyX, emptyY);
+
+	if (useAnimations)
+	{
+		animationInProgress = true;
+		QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect(&PuzzlePieces[emptyPieceX*sizeY + emptyPieceY]);
+		PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(eff);
+		animation = new QPropertyAnimation(eff, "opacity");
+		animation->setDuration(animationSpeed);
+		animation->setStartValue(1);
+		animation->setEndValue(0);
+		//animation->setEasingCurve(QEasingCurve::OutBack);
+		connect(animation, SIGNAL(finished()), this, SLOT(veryBeginGame()));
+		animation->start(QPropertyAnimation::DeleteWhenStopped);
+		PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
+	}
+	else
+	{
+		startGame();
+	}
+}
+
+void PuzzleArea::startGame()
+{
 	// po ustawieniu pustego elementu wyświetlamy kolejny komunikat, aby użytkownik mógł zauważyć zmianę
 	QMessageBox::information(this, "Information", "I took one puzzle piece away. Remember its position!");
 	// mieszamy ukladankę i rozpoczynamy odliczanie czasu
-	shuffle(difficulty);
+	shuffle(difficultyLevel);
 	moveCount = 0;
 	timer.start();
 }
@@ -293,4 +378,49 @@ qint64 PuzzleArea::finishGame()
 {
 	gameOver = true;
 	return timer.elapsed();
+}
+
+void PuzzleArea::swapPiecesAfterAnimation()//int x, int y)
+{
+	QRect g = PuzzlePieces[lastX*sizeY + lastY].geometry();
+	PuzzlePieces[lastX*sizeY + lastY].setGeometry(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
+	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGeometry(g);
+	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].swapPuzzlePiece(PuzzlePieces[lastX*sizeY + lastY]);
+	// ustawiamy nowe współrzędne dla "pustego" elementu
+	setEmptyPiece(lastX, lastY);
+	//QMessageBox::information(this, "Aab", "Ass");
+	if (animation)
+		animation->deleteLater();
+	animationInProgress = false;
+	checkIfFinished();
+}
+
+void PuzzleArea::endGame()//int x, int y)
+{
+	animationInProgress = false;
+	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(Q_NULLPTR);
+	showSummary();
+}
+
+void PuzzleArea::veryBeginGame()
+{
+	animationInProgress = false;
+	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(Q_NULLPTR);
+	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(false);
+	startGame();
+}
+
+void PuzzleArea::setAnimation(bool animate)
+{
+	useAnimations = animate;
+}
+
+bool PuzzleArea::setAnimationSpeed(int speed)
+{
+	if (speed >= minAnimationSpeed && speed <= maxAnimationSpeed)
+	{
+		animationSpeed = speed;
+		return true;
+	}
+	return false;
 }

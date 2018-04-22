@@ -112,7 +112,7 @@
       <x>780</x>
       <y>30</y>
       <width>291</width>
-      <height>291</height>
+      <height>361</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -318,6 +318,57 @@
      </property>
      <property name="text">
       <string>Spacing between rows:</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="showAnimationsCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>270</y>
+       <width>161</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show animations</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="animationSpeedSpinBox">
+     <property name="geometry">
+      <rect>
+       <x>211</x>
+       <y>300</y>
+       <width>51</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>50</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="singleStep">
+      <number>50</number>
+     </property>
+     <property name="value">
+      <number>100</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="animationSpeedLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>300</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Animation speed (ms):</string>
      </property>
     </widget>
    </widget>

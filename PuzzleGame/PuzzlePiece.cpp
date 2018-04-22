@@ -120,6 +120,40 @@ void PuzzlePiece::swapPuzzlePiece(PuzzlePiece& puzzlePiece)
 		bool visibility = puzzlePiece.isVisible();
 		puzzlePiece.setVisible(isVisible());
 		setVisible(visibility);
+
+		//if (puzzlePiece.isVisible())
+		//{
+		//	animation = new QPropertyAnimation(&puzzlePiece, "geometry");
+		//	animation->setDuration(1000);
+		//	animation->setStartValue(puzzlePiece.geometry());
+		//	animation->setEndValue(geometry());
+		//	setGeometry(puzzlePiece.geometry());
+		//	//connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
+		//	myPuzzleArea->addAnimation(animation);
+		//	//animation->start(QAbstractAnimation::DeleteWhenStopped);
+		//}
+		//else
+		//{
+		//	animation = new QPropertyAnimation(this, "geometry");
+		//	animation->setDuration(1000);
+		//	animation->setStartValue(geometry());
+		//	animation->setEndValue(puzzlePiece.geometry());
+		//	puzzlePiece.setGeometry(geometry());
+		//	//connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
+		//	myPuzzleArea->addAnimation(animation);
+		//	//animation->start(QAbstractAnimation::DeleteWhenStopped);
+		//}
+		//return;
+		//bool visibility = puzzlePiece.isVisible();
+		//puzzlePiece.setVisible(isVisible());
+		//setVisible(visibility);
+		//return;
+		//if (puzzlePiece.pixmap())
+		//{
+		//	QImage tmpImage = puzzlePiece.pixmap()->toImage();
+		//	puzzlePiece.setPixmap(*pixmap());
+		//	setPixmap(QPixmap::fromImage(tmpImage));
+		//}
 	}
 }
 
