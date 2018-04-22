@@ -31,15 +31,11 @@ void PuzzleArea::movePuzzlePiece(const int x, const int y, bool shufflingMode)
 				animation->setStartValue(PuzzlePieces[x*sizeY + y].geometry());
 				animation->setEndValue(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
 				PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGeometry(PuzzlePieces[x*sizeY + y].geometry());
-				//connect(animation, SIGNAL(finished()), this, SLOT(swapPiecesAfterAnimation());
 				connect(animation, SIGNAL(finished()), this, SLOT(swapPiecesAfterAnimation()));
 				lastX = x;
 				lastY = y;
-				//connect(animation, SIGNAL(stateChanged()), this, SLOT(swapPiecesAfterAnimation()));// x, y)));
-				//connect(animation, SIGNAL(finished()), this, SLOT(swapPiecesAfterAnimation()));// x, y)));
-				//animationGroup->addAnimation(animation);
 				animationInProgress = true;
-				animation->start();// QAbstractAnimation::DeleteWhenStopped);
+				animation->start(QPropertyAnimation::DeleteWhenStopped);
 			}
 			else
 			{
@@ -67,21 +63,13 @@ void PuzzleArea::checkIfFinished()
 		if (useAnimations)
 		{
 			animationInProgress = true;
-			//animation = new QPropertyAnimation(&PuzzlePieces[emptyPieceX*sizeY + emptyPieceY], "geometry");
-			//animation->setDuration(animationSpeed);
-			//QRect rect = PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry();// new QRect(new QPoint(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].x() - puzzlePieceWidth - puzzlePieceSpacingY, PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].y()), new QPoint(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].x() - puzzlePieceWidth - puzzlePieceSpacingY, PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].y() + puzzleSpacingX));
-			//rect.setX(rect.x()-puzzlePieceWidth - puzzlePieceSpacingY);
-			//animation->setStartValue(rect);// PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
-			//animation->setEndValue(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
-			//animation->start(QPropertyAnimation::DeleteWhenStopped);
-
 			QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect(&PuzzlePieces[emptyPieceX*sizeY + emptyPieceY]);
 			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(eff);
 			animation = new QPropertyAnimation(eff, "opacity");
 			animation->setDuration(animationSpeed);
 			animation->setStartValue(0);
 			animation->setEndValue(1);
-			animation->setEasingCurve(QEasingCurve::InBack);
+			animation->setEasingCurve(QEasingCurve::InQuad);
 			connect(animation, SIGNAL(finished()), this, SLOT(endGame()));
 			animation->start(QPropertyAnimation::DeleteWhenStopped);
 			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
@@ -195,9 +183,7 @@ void PuzzleArea::shuffle(int difficulty)
 			}
 			movePuzzlePiece(currentX, currentY, true);
 		}
-		/*PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(false);*/
 	}
-	//animationGroup->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 bool PuzzleArea::isFinished(bool shufflingMode)
@@ -220,20 +206,15 @@ void PuzzleArea::resizePuzzlePieces()
 	newSize.setHeight(height() - (sizeX - 1) * puzzlePieceSpacingX);
 	QPixmap imageMap = QPixmap::fromImage(puzzleImage).scaled(newSize, Qt::KeepAspectRatio);
 	
-	int puzzlePieceWidth = imageMap.width() / sizeY;// (this->width() < imageMap.width()) ? this->width() / this->sizeX : imageMap.width() / this->sizeX;
+	int puzzlePieceWidth = imageMap.width() / sizeY;
 	int puzzlePieceHeight = imageMap.height() / sizeX;
 	for (int i = 0; i < sizeX; i++)
 	{
 		for (int j = 0; j < sizeY; j++)
 		{
-			//PuzzlePieces[i*sizeY + j].setPuzzleArea(this);
-			//PuzzlePieces[i*sizeY + j].setCorrectPosition(i, j);
-			//PuzzlePieces[i*sizeY + j].setCurrentPosition(i, j);
 			QPixmap newMap = imageMap.copy(PuzzlePieces[i*sizeY + j].getCorrectPositionY() * puzzlePieceWidth, PuzzlePieces[i*sizeY + j].getCorrectPositionX() * puzzlePieceHeight, puzzlePieceWidth, puzzlePieceHeight);
 			PuzzlePieces[i*sizeY + j].setPixmap(newMap);
-			//PuzzlePieces[i*sizeY + j].setParent(this);
 			PuzzlePieces[i*sizeY + j].setGeometry(j * puzzlePieceWidth + j * puzzlePieceSpacingY, i * puzzlePieceHeight + i * puzzlePieceSpacingX, puzzlePieceWidth, puzzlePieceHeight);
-			//PuzzlePieces[i*sizeY + j].show();
 		}
 	}
 }
@@ -244,7 +225,9 @@ void PuzzleArea::newGame(int elementsX, int elementsY, int difficulty, bool rand
 	//framePalette.setColor(QPalette::Background, Qt::red);
 	//setAutoFillBackground(true);
 	//setPalette(framePalette);
+
 	difficultyLevel = difficulty;
+	// prawdopodobnie można pominąć tą linijkę
 	PuzzlePieces.resize(0);
 
 	// jeśli nie ma załadowanego obrazku lub podany plik nie jest obsługiwany, ustawiamy domyślny obrazek
@@ -353,7 +336,7 @@ void PuzzleArea::beginGame(bool randomizeEmptyPiece)
 		animation->setDuration(animationSpeed);
 		animation->setStartValue(1);
 		animation->setEndValue(0);
-		//animation->setEasingCurve(QEasingCurve::OutBack);
+		animation->setEasingCurve(QEasingCurve::OutQuad);
 		connect(animation, SIGNAL(finished()), this, SLOT(veryBeginGame()));
 		animation->start(QPropertyAnimation::DeleteWhenStopped);
 		PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
@@ -380,24 +363,25 @@ qint64 PuzzleArea::finishGame()
 	return timer.elapsed();
 }
 
-void PuzzleArea::swapPiecesAfterAnimation()//int x, int y)
+void PuzzleArea::swapPiecesAfterAnimation()
 {
+	// w przypadku animacji musimy jeszcze raz zamienić właściwość geometry(), aby były takie jak przed animacją
 	QRect g = PuzzlePieces[lastX*sizeY + lastY].geometry();
 	PuzzlePieces[lastX*sizeY + lastY].setGeometry(PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].geometry());
 	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGeometry(g);
+	// po czym zastępujemy je tak, jak w przypadku, gdyby nie było animacji
 	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].swapPuzzlePiece(PuzzlePieces[lastX*sizeY + lastY]);
 	// ustawiamy nowe współrzędne dla "pustego" elementu
 	setEmptyPiece(lastX, lastY);
-	//QMessageBox::information(this, "Aab", "Ass");
-	if (animation)
-		animation->deleteLater();
 	animationInProgress = false;
+	// sprawdzamy, czy zakończono układanie
 	checkIfFinished();
 }
 
-void PuzzleArea::endGame()//int x, int y)
+void PuzzleArea::endGame()
 {
 	animationInProgress = false;
+	// usuwamy efekt fade in
 	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(Q_NULLPTR);
 	showSummary();
 }
@@ -405,6 +389,7 @@ void PuzzleArea::endGame()//int x, int y)
 void PuzzleArea::veryBeginGame()
 {
 	animationInProgress = false;
+	// usuwamy efekt fade out
 	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(Q_NULLPTR);
 	PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(false);
 	startGame();

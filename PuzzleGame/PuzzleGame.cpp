@@ -47,7 +47,7 @@ PuzzleGame::PuzzleGame(QWidget *parent)
 	qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
 
 	/**
-	Podłączanie slotów do przycisków
+	Podłączanie slotów do przycisków, checkboxów i spinboxa od prędkości animacji
 	*/
 	connect(ui.startGamePushButton, SIGNAL(clicked()), this, SLOT(startGamePushButtonClick()));
 	connect(ui.loadImagePushButton, SIGNAL(clicked()), this, SLOT(loadImagePushButtonClick()));	

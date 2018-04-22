@@ -73,21 +73,33 @@ private:
 	///	Timer do mierzenia czasu gry
 	QElapsedTimer timer;
 	qint64 timeElapsed;
-	QSequentialAnimationGroup *animationGroup = new QSequentialAnimationGroup();
+
+	/// Animacja przesuwania lub fade in/out
 	QPropertyAnimation* animation;
+	/// czy wyświetlamy animacje
 	bool useAnimations = true;
+	/// ostatnia pozycja X - używana tylko przy animacji
 	int lastX = -1;
+	/// ostatnia pozycja Y - używana tylko przy animacji
 	int lastY = -1;
+	/// czy animacja trwa
 	bool animationInProgress = false;
+	/// prędkość animacji w ms
 	int animationSpeed = defaultAnimationSpeed;
+	/// poziom trudności
 	int difficultyLevel = defaultDifficulty;
+	/**
+	Rozpoczyna grę - wywoływana w beginGame() lub po zakończeniu pierwszej animacji.
+	*/
+	void startGame();
+
 protected:
 	/**
 	Zdarzenie - zmiana rozmiaru układanki (np. zmiana rozmiaru okna) powoduje przeskalowanie układanki
 	*/
 	void resizeEvent(QResizeEvent *event);
 protected slots:
-	void swapPiecesAfterAnimation();// int x, int y);
+	void swapPiecesAfterAnimation();
 	void endGame();
 	void veryBeginGame();
 public:
@@ -100,7 +112,13 @@ public:
 	\param shufflingMode czy jesteśmy w trybie sortowania? Jeśli true to nie sprawdza, czy gra się zakończyła (układanka jest ułożona).
 	*/
 	void movePuzzlePiece(const int x, const int y, bool shufflingMode = false);
+	/**
+	Sprawdza, czy skończono układać i jeśli tak, to kończy grę.
+	*/
 	void checkIfFinished();
+	/**
+	Wyświetla podsumowanie ostatniej gry (zwykle używane po zakończeniu gry).
+	*/
 	void showSummary();
 	/** Zwraca pozycję X "pustego" elementu */
 	int getEmptyPieceX();
@@ -144,15 +162,23 @@ public:
 	*/
 	int getMoveCount();
 	/**
-	Rozpoczyna grę i zadanym stopniem trudności i z losowaniem miejsca pustego elementu lub bez.
+	Rozpoczyna grę z losowaniem miejsca pustego elementu lub bez.
 	*/
 	void beginGame(bool randomizeEmptyPiece);
-	void startGame();
 	/**
 	Kończy grę i zwraca czas jej trwania (w ms).
 	\return Czas trwania gry w ms.
 	*/
 	qint64 finishGame();
+	/**
+	Włączą lub wyłącza animacje.
+	\param animate true aby włączyć animacje, false aby wyłączyć.
+	*/
 	void setAnimation(bool animate);
+	/**
+	Ustawia czas trwania animacji.
+	\param speed Czas trwania animacji (w ms).
+	\return Zwraca true, jeśli wartość została zmieniona, w przeciwnym przypadku false (gdy parametr speed jest poza zakresem ustalonych wartości minimalnej i maksymalnej.
+	*/
 	bool setAnimationSpeed(int speed);
 };
