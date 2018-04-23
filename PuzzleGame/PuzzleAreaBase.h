@@ -1,6 +1,6 @@
 ﻿#pragma once
 /** PuzzleAreaBase
-	Klasa abstrakcyjna, bazowa dla PuzzleArea, jej jedyną funkcją jest dostarczenie prototypu metody MovePuzzlePiece
+	Klasa abstrakcyjna, bazowa dla PuzzleArea, jej jedyną funkcją jest dostarczenie prototypu metody MovePuzzlePiece.
 */
 class PuzzleAreaBase
 {

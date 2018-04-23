@@ -5,6 +5,7 @@
 
 /** PuzzleGame
 Klasa reprezentuje główne okno programu. Dziedziczy po QMainWindow.
+Dostarcza interfejs użytkownika oraz inicjalizuje instancję PuzzleArea.
 */
 class PuzzleGame : public QMainWindow
 {
