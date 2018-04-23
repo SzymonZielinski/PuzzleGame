@@ -70,7 +70,7 @@ void PuzzleArea::checkIfFinished()
 			animation->setStartValue(0);
 			animation->setEndValue(1);
 			animation->setEasingCurve(QEasingCurve::InQuad);
-			connect(animation, SIGNAL(finished()), this, SLOT(endGame()));
+			connect(animation, SIGNAL(finished()), this, SLOT(endGameAfterAnimation()));
 			animation->start(QPropertyAnimation::DeleteWhenStopped);
 			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
 		}
@@ -84,7 +84,9 @@ void PuzzleArea::checkIfFinished()
 
 void PuzzleArea::showSummary()
 {
-	QString finishMessage = "You solved the puzzle!\nIt took you " + QString::number(moveCount) + " moves\nor " + QString::number(timeElapsed) + " seconds.";
+	int timeElapsedMinutes = timeElapsed / 60;
+	int timeElapsedSeconds = timeElapsed % 60;
+	QString finishMessage = "You solved the puzzle!\nIt took you " + QString::number(moveCount) + " moves\nor " + (timeElapsedMinutes > 0 ? QString::number(timeElapsedMinutes) + " min " : "") + QString::number(timeElapsedSeconds) + " seconds.";
 	QMessageBox::information(this, "Congratulations", finishMessage);
 }
 
@@ -228,7 +230,7 @@ void PuzzleArea::newGame(int elementsX, int elementsY, int difficulty, bool rand
 
 	difficultyLevel = difficulty;
 	// prawdopodobnie można pominąć tą linijkę
-	PuzzlePieces.resize(0);
+	//PuzzlePieces.resize(0);
 
 	// jeśli nie ma załadowanego obrazku lub podany plik nie jest obsługiwany, ustawiamy domyślny obrazek
 	if (fileName.isNull() || fileName.isEmpty() || !puzzleImage.load(fileName))
@@ -337,7 +339,7 @@ void PuzzleArea::beginGame(bool randomizeEmptyPiece)
 		animation->setStartValue(1);
 		animation->setEndValue(0);
 		animation->setEasingCurve(QEasingCurve::OutQuad);
-		connect(animation, SIGNAL(finished()), this, SLOT(veryBeginGame()));
+		connect(animation, SIGNAL(finished()), this, SLOT(beginGameAfterAnimation()));
 		animation->start(QPropertyAnimation::DeleteWhenStopped);
 		PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setVisible(true);
 	}
@@ -378,7 +380,7 @@ void PuzzleArea::swapPiecesAfterAnimation()
 	checkIfFinished();
 }
 
-void PuzzleArea::endGame()
+void PuzzleArea::endGameAfterAnimation()
 {
 	animationInProgress = false;
 	// usuwamy efekt fade in
@@ -386,7 +388,7 @@ void PuzzleArea::endGame()
 	showSummary();
 }
 
-void PuzzleArea::veryBeginGame()
+void PuzzleArea::beginGameAfterAnimation()
 {
 	animationInProgress = false;
 	// usuwamy efekt fade out

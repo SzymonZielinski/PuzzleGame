@@ -100,8 +100,8 @@ protected:
 	void resizeEvent(QResizeEvent *event);
 protected slots:
 	void swapPiecesAfterAnimation();
-	void endGame();
-	void veryBeginGame();
+	void endGameAfterAnimation();
+	void beginGameAfterAnimation();
 public:
 	PuzzleArea(QWidget *parent = Q_NULLPTR);
 	~PuzzleArea();
