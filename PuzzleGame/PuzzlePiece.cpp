@@ -77,12 +77,14 @@ void PuzzlePiece::setCurrentPosition(const int positionX, const int positionY)
 
 void PuzzlePiece::mousePressEvent(QMouseEvent *qevent)
 {
+	// późne wiązanie wywoła właściwą metodę
 	myPuzzleArea->movePuzzlePiece(currentX, currentY);
 }
 
 /*
 W poprzedniej wersji używano nieco zmodyfikowanej wersji, aby korzystać z std::swap. W obecnej wersji zostało to uproszczone i obecnie używamy tylko metody swapPuzzlePiece.
 Operator przypisania już był napisany, więc go zostawiłem.
+Ten komentarz jest celowo pozbawiony jednej gwiazdki, aby doxygen go pominął.
 */
 PuzzlePiece& PuzzlePiece::operator=(PuzzlePiece puzzlePiece)
 {
