@@ -10,7 +10,14 @@ class PuzzleGame : public QMainWindow
 {
 	Q_OBJECT
 public:
+	/**
+	\brief Domyślny konstruktor.
+	\param parent "Rodzic" elementu.
+	*/
 	PuzzleGame(QWidget *parent = Q_NULLPTR);
+	/**
+	\brief Domyślny destruktor.
+	*/
 	~PuzzleGame();
 public slots:
 	/**
@@ -21,7 +28,13 @@ public slots:
 	\brief Ładowanie obrazku puzzli z pliku (przycisk).
 	*/
 	void loadImagePushButtonClick();
+	/**
+	\brief Zmiana stanu checkboxa "Pokazuj animacje".
+	*/
 	void showAnimationsCheckBoxStateChanged(bool checkState);
+	/**
+	\brief Zmiana wartości spinboxa prędkości animacji.
+	*/
 	void animationSpeedSpinBoxValueChanged(int animationSpeed);
 	
 private:

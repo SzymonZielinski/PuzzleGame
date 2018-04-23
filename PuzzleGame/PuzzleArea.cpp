@@ -24,6 +24,7 @@ void PuzzleArea::movePuzzlePiece(const int x, const int y, bool shufflingMode)
 		// przesuwamy element tylko wtedy, gdy to możliwe (tzn. sąsiadujacy element jest pusty)
 		if (!(abs(x - emptyPieceX) == 1 && abs(y - emptyPieceY) == 0) != !(abs(y - emptyPieceY) == 1 && abs(x - emptyPieceX) == 0))
 		{
+			// jeśli nie 
 			if (useAnimations && !shufflingMode)
 			{				
 				animation = new QPropertyAnimation(&PuzzlePieces[x*sizeY + y], "geometry");
@@ -45,13 +46,13 @@ void PuzzleArea::movePuzzlePiece(const int x, const int y, bool shufflingMode)
 				setEmptyPiece(x, y);
 			}
 						
-			// zwiększamy licznik ruchów, jeśli gra się toczy
+			// jeśli gra jest w trakcie to zwiększamy licznik ruchów oraz sprawdzamy, czy układanka rostała rozwiązana
 			if (!shufflingMode)
+			{
 				moveCount++;
+				checkIfFinished();
+			}
 		}
-		// jeśli gra była w trakcie i układanka została rozwiązana, wyświetlamy komunikat
-		if (!shufflingMode)
-			checkIfFinished();
 	}
 }
 
@@ -59,9 +60,12 @@ void PuzzleArea::checkIfFinished()
 {
 	if (isFinished())
 	{
+		// czas gry w sekundach
 		timeElapsed = finishGame() / 1000;
+		// jeśli pokazujemy animacje...
 		if (useAnimations)
 		{
+			// ostatnia animacja fade in "pustego" elementu
 			animationInProgress = true;
 			QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect(&PuzzlePieces[emptyPieceX*sizeY + emptyPieceY]);
 			PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(eff);
@@ -145,7 +149,7 @@ void PuzzleArea::shuffle(int difficulty)
 	if (difficulty < 1 || difficulty > 1000)
 		difficulty = defaultDifficulty;
 	// mieszamy tak długo, aż układanka nie będzie w stanie "rozwiązanym"
-	while (isFinished(true))
+	while (isFinished())
 	{
 		int currentX = emptyPieceX;
 		int currentY = emptyPieceY;
@@ -188,7 +192,7 @@ void PuzzleArea::shuffle(int difficulty)
 	}
 }
 
-bool PuzzleArea::isFinished(bool shufflingMode)
+bool PuzzleArea::isFinished()
 {
 	for (int i = 0; i < sizeX; i++)
 	{
@@ -223,14 +227,7 @@ void PuzzleArea::resizePuzzlePieces()
 
 void PuzzleArea::newGame(int elementsX, int elementsY, int difficulty, bool randomizeEmptyPiece, QString fileName, int spacingX, int spacingY, bool startImmediately)
 {
-	//QPalette framePalette = palette();
-	//framePalette.setColor(QPalette::Background, Qt::red);
-	//setAutoFillBackground(true);
-	//setPalette(framePalette);
-
 	difficultyLevel = difficulty;
-	// prawdopodobnie można pominąć tą linijkę
-	//PuzzlePieces.resize(0);
 
 	// jeśli nie ma załadowanego obrazku lub podany plik nie jest obsługiwany, ustawiamy domyślny obrazek
 	if (fileName.isNull() || fileName.isEmpty() || !puzzleImage.load(fileName))
@@ -262,6 +259,7 @@ void PuzzleArea::newGame(int elementsX, int elementsY, int difficulty, bool rand
 	if (puzzlePieceSpacingY > maxPuzzlePieceSpacingY)
 		puzzlePieceSpacingY = maxPuzzlePieceSpacingY;
 
+	// ustalamy wielkość pojedynczego elementu
 	int puzzlePieceWidthCheck = width() / sizeY - (sizeY - 1)*puzzlePieceSpacingY;
 	int puzzlePieceHeightCheck = height() / sizeX - (sizeX - 1)*puzzlePieceSpacingX;
 
@@ -300,8 +298,10 @@ void PuzzleArea::newGame(int elementsX, int elementsY, int difficulty, bool rand
 		}
 	}
 
+	// dostosowujemy je do wielkości
 	resizePuzzlePieces();
 
+	// czy rozpoczynamy grę natychmiast?
 	if (startImmediately)
 		beginGame(randomizeEmptyPiece);
 }
@@ -329,8 +329,10 @@ void PuzzleArea::beginGame(bool randomizeEmptyPiece)
 	}
 	setEmptyPiece(emptyX, emptyY);
 
+	// jeśli pokazujemy animacje...
 	if (useAnimations)
 	{
+		// animacja fade out "pustego" elementu
 		animationInProgress = true;
 		QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect(&PuzzlePieces[emptyPieceX*sizeY + emptyPieceY]);
 		PuzzlePieces[emptyPieceX*sizeY + emptyPieceY].setGraphicsEffect(eff);
